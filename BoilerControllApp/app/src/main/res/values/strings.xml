@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">Boiler Controll App</string>
+    <string name="home_button1_text">Бойлер</string>
+    <string name="home_button2_text">Отопление</string>
+    <string name="home_button3_text">Отопл. Басейн</string>
+</resources>

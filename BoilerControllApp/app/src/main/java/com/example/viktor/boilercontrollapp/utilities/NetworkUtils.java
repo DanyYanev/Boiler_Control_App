@@ -1,0 +1,122 @@
+/*
+ * Copyright (C) 2016 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.example.viktor.boilercontrollapp.utilities;
+
+import android.net.Uri;
+import android.util.Log;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.Scanner;
+
+/**
+ * These utilities will be used to communicate with the weather servers.
+ */
+public final class NetworkUtils {
+
+    private static final String TAG = NetworkUtils.class.getSimpleName();
+
+    private static final String SERVER_URL =
+            "http://178.169.176.184:8000/users/";
+
+    //private static final String USER_ID = null;
+
+
+    public static URL buildUrl(String userId) {
+        Uri builtUri = Uri.parse(SERVER_URL).buildUpon()
+                .appendPath(userId)
+                .build();
+
+        URL url = null;
+        try {
+            url = new URL(builtUri.toString());
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+
+        Log.e(TAG, "Built URI " + url);
+
+        return url;
+    }
+
+    /**
+     * Builds the URL used to talk to the weather server using latitude and longitude of a
+     * location.
+     *
+     * @param lat The latitude of the location
+     * @param lon The longitude of the location
+     * @return The Url to use to query the weather server.
+     */
+    public static URL buildUrl(Double lat, Double lon) {
+        /** This will be implemented in a future lesson **/
+        return null;
+    }
+
+    /**
+     * This method returns the entire result from the HTTP response.
+     *
+     * @param url The URL to fetch the HTTP response from.
+     * @return The contents of the HTTP response.
+     * @throws IOException Related to network and stream reading
+     */
+    public static String getResponseFromHttpUrl(URL url) throws IOException {
+        HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+        String jsonServerResponse = null;
+        String bTemp = null;
+        String hTemp = null;
+        try {
+            InputStream in = urlConnection.getInputStream();
+
+            Scanner scanner = new Scanner(in);
+            scanner.useDelimiter("\\A");
+
+            boolean hasInput = scanner.hasNext();
+            if (hasInput) {
+                jsonServerResponse = scanner.next();
+            } else {
+                return null;
+            }
+
+
+            JSONObject responce = new JSONObject(jsonServerResponse);
+            JSONArray values = responce.getJSONArray("values");
+
+            for(int i = 0 ;  i < values.length() ; ++ i){
+                if(values.getJSONObject(i).getString("key").equals("BTemp")){
+                    bTemp = values.getJSONObject(i).getString("value");
+                }
+            }
+
+
+
+            //hTemp = values.getJSONObject(12).getString("HTemp");
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        } finally {
+            urlConnection.disconnect();
+        }
+
+        return bTemp;
+    }
+}
