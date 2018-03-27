@@ -3,4 +3,7 @@
     <string name="home_button1_text">Бойлер</string>
     <string name="home_button2_text">Отопление</string>
     <string name="home_button3_text">Отопл. Басейн</string>
+    <string name="home_view_string">Home</string>
+    <string name="boiler_view_string">Boiler</string>
+    <string name="heating_view_string">Heating</string>
 </resources>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/home_view"
+            android:title="@string/home_view_string"/>
+        <item
+            android:id="@+id/boiler_view"
+            android:title="@string/boiler_view_string"/>
+        <item
+            android:id="@+id/heating_view"
+            android:title="@string/heating_view_string"/>
+    </group>
+</menu>
