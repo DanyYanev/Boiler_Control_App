@@ -29,6 +29,7 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.HashMap;
 import java.util.Scanner;
 
 /**
@@ -39,7 +40,7 @@ public final class NetworkUtils {
     private static final String TAG = NetworkUtils.class.getSimpleName();
 
     private static final String SERVER_URL =
-            "http://178.169.176.184:8000/users/";
+            "http://192.168.43.142:3000/users/";
 
     //private static final String USER_ID = null;
 
@@ -78,11 +79,11 @@ public final class NetworkUtils {
 
     }
 
-    public static String getResponseFromHttpUrl(URL url) throws IOException {
+    public static HashMap<String, String> getResponseFromHttpUrl(URL url) throws IOException {
         HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
         String jsonServerResponse = null;
-        String bTemp = null;
-        String hTemp = null;
+        HashMap<String, String> values = new HashMap<>();
+
         try {
             InputStream in = urlConnection.getInputStream();
 
@@ -97,18 +98,14 @@ public final class NetworkUtils {
             }
 
 
-            JSONObject responce = new JSONObject(jsonServerResponse);
-            JSONArray values = responce.getJSONArray("values");
+            JSONObject response = new JSONObject(jsonServerResponse);
+            JSONArray jsonValues = response.getJSONArray("values");
 
-            for(int i = 0 ;  i < values.length() ; ++ i){
-                if(values.getJSONObject(i).getString("key").equals("BTemp")){
-                    bTemp = values.getJSONObject(i).getString("value");
-                }
+            for(int i = 0 ;  i < jsonValues.length() ; ++ i){
+                JSONObject jsonObject = jsonValues.getJSONObject(i);
+                values.put(jsonObject.getString("key"), jsonObject.getString("value"));
             }
 
-
-
-            //hTemp = values.getJSONObject(12).getString("HTemp");
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -116,6 +113,6 @@ public final class NetworkUtils {
             urlConnection.disconnect();
         }
 
-        return bTemp;
+        return values;
     }
 }

@@ -8,16 +8,19 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import com.example.viktor.boilercontrollapp.utilities.NetworkUtils;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity {
     TextView mBoilerTemperature;
     ProgressBar mLoadingIndicator;
     SwipeRefreshLayout mSwipeRefreshLayout;
+    ToggleButton mBoilerButton;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
         mBoilerTemperature = findViewById(R.id.tv_boiler_temperature);
         mLoadingIndicator = findViewById(R.id.pb_loading_indicator);
         mSwipeRefreshLayout = findViewById(R.id.sr_refresh_layout);
+        mBoilerButton = findViewById(R.id.tb_boiler);
         setDataFromServer();
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -33,7 +37,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
 
 
     void setDataFromServer(){
@@ -45,31 +48,31 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-    class ServerRequestTask extends AsyncTask<URL, Void, String>{
+    class ServerRequestTask extends AsyncTask<URL, Void, HashMap<String, String>>{
         @Override
         protected void onPreExecute() {
             mLoadingIndicator.setVisibility(View.VISIBLE);
         }
 
         @Override
-        protected String doInBackground(URL... urls) {
+        protected HashMap<String, String> doInBackground(URL... urls) {
             URL apiURL = urls[0];
-            String hTemp = null;
+            HashMap<String, String> values = new HashMap<>();
 
             try {
-                hTemp = NetworkUtils.getResponseFromHttpUrl(apiURL);
+                values = NetworkUtils.getResponseFromHttpUrl(apiURL);
             } catch (IOException e) {
                 e.printStackTrace();
             }
 
-            return hTemp;
+            return values;
         }
 
         @Override
-        protected void onPostExecute(String s) {
+        protected void onPostExecute(HashMap<String, String> values) {
             mLoadingIndicator.setVisibility(View.INVISIBLE);
-            if(s != null && !s.equals("")){
-                mBoilerTemperature.setText(s);
+            if(!values.isEmpty()){
+                mBoilerTemperature.setText(values.get("BTemp"));
             }else{
                 Toast.makeText(MainActivity.this, "Connection Error Occurred", Toast.LENGTH_LONG).show();
             }
