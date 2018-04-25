@@ -32,15 +32,12 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Scanner;
 
-/**
- * These utilities will be used to communicate with the weather servers.
- */
 public final class NetworkUtils {
 
     private static final String TAG = NetworkUtils.class.getSimpleName();
 
     private static final String SERVER_URL =
-            "http://192.168.43.142:3000/users/";
+            "http://178.169.176.184:8000/users/";
 
     //private static final String USER_ID = null;
 
@@ -115,4 +112,5 @@ public final class NetworkUtils {
 
         return values;
     }
+
 }
