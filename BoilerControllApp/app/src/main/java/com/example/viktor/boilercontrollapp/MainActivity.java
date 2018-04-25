@@ -1,6 +1,8 @@
 package com.example.viktor.boilercontrollapp;
 
 import android.os.AsyncTask;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -11,23 +13,27 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import com.example.viktor.boilercontrollapp.utilities.MasterFragment;
 import com.example.viktor.boilercontrollapp.utilities.NetworkUtils;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.HashMap;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements MasterFragment.OnMenuOptionSelectListener{
 //    TextView mBoilerTemperature;
 //    ProgressBar mLoadingIndicator;
 //    SwipeRefreshLayout mSwipeRefreshLayout;
 //    ToggleButton mBoilerButton;
+    Fragment fMaster;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
+
+
 
 //        mBoilerTemperature = findViewById(R.id.tv_boiler_temperature);
 //        mLoadingIndicator = findViewById(R.id.pb_loading_indicator);
@@ -52,6 +58,10 @@ public class MainActivity extends AppCompatActivity {
         return;
     }
 
+    @Override
+    public void onOptionSelected(int position) {
+        Toast.makeText(MainActivity.this, Integer.toString(position), Toast.LENGTH_LONG).show();
+    }
 
 
     class ServerRequestTask extends AsyncTask<URL, Void, HashMap<String, String>>{
