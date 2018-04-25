@@ -33,8 +33,9 @@ public class MainActivity extends AppCompatActivity implements MasterFragment.On
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
 
-
-
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.add(R.id.fragment_detail, new HomeFragment());
+        fragmentTransaction.commit();
 //        mBoilerTemperature = findViewById(R.id.tv_boiler_temperature);
 //        mLoadingIndicator = findViewById(R.id.pb_loading_indicator);
 //        mSwipeRefreshLayout = findViewById(R.id.sr_refresh_layout);

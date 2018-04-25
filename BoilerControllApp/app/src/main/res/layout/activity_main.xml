@@ -29,10 +29,9 @@
 
         <!--Detail layout -->
         <FrameLayout
+            android:id="@+id/fragment_detail"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginLeft="56dp">
-
-        </FrameLayout>
+            android:layout_marginLeft="56dp"></FrameLayout>
     </android.support.v4.widget.SlidingPaneLayout>
 </LinearLayout>
