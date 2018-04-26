@@ -21,11 +21,11 @@
 
         <!--Master layout -->
         <fragment
-        android:id="@+id/fragment_master"
-        android:name="com.example.viktor.boilercontrollapp.utilities.MasterFragment"
-        android:layout_width="220dp"
-        android:layout_height="match_parent"
-        android:layout_marginTop="?attr/actionBarSize"></fragment>
+            android:id="@+id/fragment_master"
+            android:name="com.example.viktor.boilercontrollapp.utilities.MasterFragment"
+            android:layout_width="220dp"
+            android:layout_height="match_parent"
+            android:layout_marginTop="?attr/actionBarSize"></fragment>
 
         <!--Detail layout -->
         <FrameLayout

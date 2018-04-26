@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity implements MasterFragment.On
 //    ProgressBar mLoadingIndicator;
 //    SwipeRefreshLayout mSwipeRefreshLayout;
 //    ToggleButton mBoilerButton;
-    Fragment fMaster;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,6 +61,17 @@ public class MainActivity extends AppCompatActivity implements MasterFragment.On
 
     @Override
     public void onOptionSelected(int position) {
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        switch(position){
+            case 0:
+                fragmentTransaction.replace(R.id.fragment_detail, new HomeFragment());
+                fragmentTransaction.commit();
+                break;
+            case 2:
+                fragmentTransaction.replace(R.id.fragment_detail, new BoilerFragment());
+                fragmentTransaction.commit();
+                break;
+        }
         Toast.makeText(MainActivity.this, Integer.toString(position), Toast.LENGTH_LONG).show();
     }
 
