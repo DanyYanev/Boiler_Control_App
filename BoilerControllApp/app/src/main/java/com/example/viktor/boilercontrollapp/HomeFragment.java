@@ -167,7 +167,7 @@ public class HomeFragment extends Fragment {
 
         @Override
         protected Void doInBackground(String[]... strings) {
-            String data[] = strings[0];;
+            String data[] = strings[0];
 
             try {
 
