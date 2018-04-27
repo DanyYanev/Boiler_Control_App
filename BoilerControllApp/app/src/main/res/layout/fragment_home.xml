@@ -6,6 +6,7 @@
     tools:context="com.example.viktor.boilercontrollapp.HomeFragment">
 
     <pl.droidsonroids.gif.GifImageView
+        android:id="@+id/background_gif"
         android:layout_width="match_parent"
         android:layout_height="202dp"
         android:src="@drawable/app_background" />

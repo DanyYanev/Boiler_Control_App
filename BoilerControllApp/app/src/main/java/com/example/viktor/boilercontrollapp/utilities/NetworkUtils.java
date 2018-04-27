@@ -26,6 +26,7 @@ import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -37,7 +38,8 @@ public final class NetworkUtils {
     private static final String TAG = NetworkUtils.class.getSimpleName();
 
     private static final String SERVER_URL =
-            "http://178.169.176.184:8000/users/";
+                "http://192.168.34.157:3000/users/";
+    //"http://178.169.176.184:8000/users/";
 
     //private static final String USER_ID = null;
 
@@ -60,19 +62,29 @@ public final class NetworkUtils {
     }
 
     public static void sendPostRequestToServer(JSONObject data, URL url) throws IOException {
-        HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-        try {
-            urlConnection.setRequestProperty("Content-Type", "text/json; charset=utf-8");
-
-            urlConnection.setDoInput(true);
-            urlConnection.setFixedLengthStreamingMode(data.toString().length());
-
-            OutputStream out = new BufferedOutputStream(urlConnection.getOutputStream());
-
-            out.write(data.toString().getBytes());
-        }finally {
-            urlConnection.disconnect();
-        }
+//        HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+//
+//            urlConnection.setRequestMethod("PUT");
+//            //
+//
+//            urlConnection.setDoInput(true);
+//            //urlConnection.setFixedLengthStreamingMode(data.toString().length());
+//
+//            OutputStreamWriter out = new OutputStreamWriter(urlConnection.getOutputStream());
+//            Log.d("JsonData", data.toString());
+//            out.write(data.toString());
+//            out.close();
+//
+//            urlConnection.disconnect();
+        HttpURLConnection httpCon = (HttpURLConnection) url.openConnection();
+        httpCon.setDoOutput(true);
+        httpCon.setRequestMethod("PUT");
+        httpCon.setRequestProperty("Content-Type", "application/json");
+        OutputStreamWriter out = new OutputStreamWriter(
+                httpCon.getOutputStream());
+        out.write(data.toString());
+        out.close();
+        httpCon.getInputStream();
 
     }
 

@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/BoilerControllApp.iml" filepath="$PROJECT_DIR$/BoilerControllApp.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/flexibleciruclarseekbar/flexibleciruclarseekbar.iml" filepath="$PROJECT_DIR$/flexibleciruclarseekbar/flexibleciruclarseekbar.iml" />
     </modules>
   </component>
 </project>

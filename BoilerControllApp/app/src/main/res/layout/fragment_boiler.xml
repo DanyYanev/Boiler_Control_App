@@ -1,13 +1,28 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="com.example.viktor.boilercontrollapp.BoilerFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
 
-</FrameLayout>
+    <Switch
+        android:id="@+id/switch1"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:text="Switch" />
+
+    <com.skumar.flexibleciruclarseekbar.CircularSeekBar
+        android:id="@+id/temperature_seek_bar"
+        android:layout_width="match_parent"
+        android:layout_height="225dp"
+        android:padding="45dp" />
+
+    <com.skumar.flexibleciruclarseekbar.CircularSeekBar
+        android:id="@+id/hysteresis_seek_bar"
+        android:layout_width="match_parent"
+        android:layout_height="225dp"
+        android:padding = "45dp" />
+
+</LinearLayout>
