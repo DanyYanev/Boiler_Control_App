@@ -1,5 +1,7 @@
 package com.example.viktor.boilercontrollapp;
 
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.graphics.drawable.TransitionDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -20,6 +22,8 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 
 import pl.droidsonroids.gif.GifDrawable;
@@ -66,14 +70,22 @@ public class HomeFragment extends Fragment {
         bBoiler.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 int durationMillis = 1000;
                 bBoilerState = !bBoilerState;
+                ValueAnimator boilerButtonAnim = ValueAnimator.ofInt(0, 100);
+                float defX = bBoiler.getX();
+                ObjectAnimator animation = ObjectAnimator.ofFloat(bBoiler, "translationX", 1000f);
+                animation.setDuration(1000);
+                animation.start();
                 sendDataToServer("BoilerPic", bBoilerState.toString());
+
 
                 if(bBoilerState)
                     bBoiler.setBackgroundResource(R.drawable.button_off_on_transition);
                 else
                     bBoiler.setBackgroundResource(R.drawable.button_on_off_transition);
+                Date currentTime = Calendar.getInstance().getTime();
                 TransitionDrawable transition = (TransitionDrawable) bBoiler.getBackground();
                 transition.startTransition(durationMillis);
 
@@ -109,15 +121,7 @@ public class HomeFragment extends Fragment {
     }
 
     private void initGifBackground(){
-        gifBackground = (GifImageView) getView().findViewById(R.id.background_gif);
-        gifBackgroundController = (GifDrawable) gifBackground.getDrawable();
-
-
-        Log.d("GifDuration", Integer.toString(gifBackgroundController.getDuration()));
-        gifBackgroundController.getDuration();
-        gifBackgroundController.setSpeed(5.0f);
-
-        gifBackgroundController.setSpeed(0.0001f);
+        new SetBackgroundThread().start();
     }
 
     class ServerGetRequestTask extends AsyncTask<URL, Void, HashMap<String, String>> {
@@ -192,7 +196,27 @@ public class HomeFragment extends Fragment {
 
         @Override
         protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
+            Toast.makeText(getActivity(), "Connection Error Occurred", Toast.LENGTH_LONG).show();
+            ObjectAnimator animation = ObjectAnimator.ofFloat(bBoiler, "translationX", 0f);
+            animation.setDuration(1000);
+            animation.start();
+        }
+    }
+
+    class SetBackgroundThread extends Thread{
+        public void run(){
+            gifBackground = (GifImageView) getView().findViewById(R.id.background_gif);
+            gifBackgroundController = (GifDrawable) gifBackground.getDrawable();
+
+            int durationGif = gifBackgroundController.getDuration();
+            Calendar calendar = Calendar.getInstance();
+            double gifMinuteChange = durationGif / (24 * 60);
+            double curTime = (calendar.get(Calendar.MINUTE) +  (calendar.get(Calendar.HOUR_OF_DAY) * 60 ) + 3*60) % (24 * 60);
+            Log.e("Time: ", (Integer.toString(calendar.get(Calendar.HOUR))) + ":" + Integer.toString(calendar.get(Calendar.MINUTE)));
+            gifBackgroundController.setSpeed(4.0f);
+            while(gifBackgroundController.getCurrentPosition() / 50 != (int)(gifMinuteChange * curTime) / 50);
+            gifBackgroundController.seekTo((int)(gifMinuteChange * curTime));
+            gifBackgroundController.setSpeed(0.001f);
         }
     }
 }

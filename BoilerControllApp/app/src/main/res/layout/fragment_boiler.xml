@@ -34,17 +34,21 @@
     <com.skumar.flexibleciruclarseekbar.CircularSeekBar
         android:id="@+id/temperature_seek_bar"
         android:layout_width="match_parent"
-        android:layout_height="225dp"
+        android:layout_height="200dp"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/switch1"
-        android:padding="45dp" />
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="40dp"
+        android:padding="20dp"/>
 
     <com.skumar.flexibleciruclarseekbar.CircularSeekBar
         android:id="@+id/hysteresis_seek_bar"
         android:layout_width="match_parent"
-        android:layout_height="225dp"
+        android:layout_height="200dp"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/temperature_seek_bar"
-        android:padding="45dp" />
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="40dp"
+        android:padding="20dp"/>
 
 </RelativeLayout>

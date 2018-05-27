@@ -7,8 +7,10 @@
 
     <pl.droidsonroids.gif.GifImageView
         android:id="@+id/background_gif"
+        android:layout_height="172dp"
         android:layout_width="match_parent"
-        android:layout_height="202dp"
+        android:padding="0dp"
+        android:layout_margin="0dp"
         android:src="@drawable/app_background" />
 
     <Button
