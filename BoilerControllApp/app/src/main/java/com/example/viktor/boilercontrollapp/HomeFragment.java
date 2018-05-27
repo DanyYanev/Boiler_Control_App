@@ -34,13 +34,11 @@ import static java.lang.Thread.sleep;
 
 public class HomeFragment extends Fragment {
 
-    Button bBoiler;
-    Button bHeating;
-    Button bPool;
+    ExtendedButton bBoiler;
+    ExtendedButton bHeating;
+    ExtendedButton bPool;
 
-    Boolean bBoilerState = true;
-    Boolean bHeatingState = false;
-    Boolean bPoolState = true;
+    HashMap<String, String> getRequestValues = null;
 
     GifDrawable gifBackgroundController;
     GifImageView gifBackground;
@@ -67,52 +65,27 @@ public class HomeFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
         initButtons();
-        bBoiler.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                int durationMillis = 1000;
-                bBoilerState = !bBoilerState;
-                ValueAnimator boilerButtonAnim = ValueAnimator.ofInt(0, 100);
-                float defX = bBoiler.getX();
-                ObjectAnimator animation = ObjectAnimator.ofFloat(bBoiler, "translationX", 1000f);
-                animation.setDuration(1000);
-                animation.start();
-                sendDataToServer("BoilerPic", bBoilerState.toString());
-
-
-                if(bBoilerState)
-                    bBoiler.setBackgroundResource(R.drawable.button_off_on_transition);
-                else
-                    bBoiler.setBackgroundResource(R.drawable.button_on_off_transition);
-                Date currentTime = Calendar.getInstance().getTime();
-                TransitionDrawable transition = (TransitionDrawable) bBoiler.getBackground();
-                transition.startTransition(durationMillis);
-
-            }
-        });
-
         initGifBackground();
 
     }
 
-    private void initButtons(){
-        bBoiler = getView().findViewById(R.id.boiler_button);
-        bHeating = getView().findViewById(R.id.heating_button);
-        bPool = getView().findViewById(R.id.pool_button);
+    private void initButtons() {
+        bBoiler = new ExtendedButton(false, "Boiler", "BoilerPic", (Button) getView().findViewById(R.id.boiler_button));
+        bPool = new ExtendedButton(false, "Pool", "PoolPump", (Button) getView().findViewById(R.id.pool_button));
+        bHeating = new ExtendedButton(false, "Heating", "HeatingPic", (Button) getView().findViewById(R.id.heating_button));
 
         setDataFromServer();
-    }
+        if (getRequestValues != null) {
+            bBoiler.setState(!getRequestValues.get("BoilerPic").equals("0"));
+            bPool.setState(!getRequestValues.get("PoolPump").equals("0"));
+            bHeating.setState(!getRequestValues.get("HeatingPic").equals("0"));
 
+        }
+    }
     void setDataFromServer(){
         URL apiURL = NetworkUtils.buildUrl("12345.json");
         new ServerGetRequestTask().execute(apiURL);
         return;
-    }
-
-    void sendDataToServer(String field, String value){
-        String data_arr[] = {"12345", field, value};
-        new ServerPutRequestTask().execute(data_arr);
     }
 
     void setButtonStates(Button button, boolean state){
@@ -149,57 +122,10 @@ public class HomeFragment extends Fragment {
         protected void onPostExecute(HashMap<String, String> values) {
 //            mLoadingIndicator.setVisibility(View.INVISIBLE);
             if(!values.isEmpty()){
-                bBoilerState = !values.get("BoilerPic").equals("0");
-                bHeatingState = !values.get("HeatingPic").equals("0");
-                bPoolState = !values.get("PoolPump").equals("0");
-
-                setButtonStates(bBoiler, bBoilerState);
-                setButtonStates(bHeating, bHeatingState);
-                setButtonStates(bPool, bPoolState);
-
+                getRequestValues = new HashMap<>(values);
             }else{
                 Toast.makeText(getActivity(), "Connection Error Occurred", Toast.LENGTH_LONG).show();
             }
-        }
-    }
-
-    class ServerPutRequestTask extends AsyncTask<String[], Void, Void> {
-//        @Override
-//        protected void onPreExecute() {
-//            mLoadingIndicator.setVisibility(View.VISIBLE);
-//        }
-
-        @Override
-        protected Void doInBackground(String[]... strings) {
-            String data[] = strings[0];
-
-            try {
-
-                JSONObject dataJson = new JSONObject();
-                dataJson.put("token", data[0]);
-                dataJson.put("controller_token", "testing");
-                JSONObject values = new JSONObject();
-                values.put("key", data[1]);
-                values.put("value", data[2].equals("true") ? 1 : 0);
-
-                dataJson.put("values_attributes", new JSONArray().put(values));
-                try {
-                    NetworkUtils.sendPostRequestToServer(dataJson, NetworkUtils.buildUrl(data[0]));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            Toast.makeText(getActivity(), "Connection Error Occurred", Toast.LENGTH_LONG).show();
-            ObjectAnimator animation = ObjectAnimator.ofFloat(bBoiler, "translationX", 0f);
-            animation.setDuration(1000);
-            animation.start();
         }
     }
 
@@ -215,7 +141,7 @@ public class HomeFragment extends Fragment {
             Log.e("Time: ", (Integer.toString(calendar.get(Calendar.HOUR))) + ":" + Integer.toString(calendar.get(Calendar.MINUTE)));
             gifBackgroundController.setSpeed(4.0f);
             while(gifBackgroundController.getCurrentPosition() / 50 != (int)(gifMinuteChange * curTime) / 50);
-            gifBackgroundController.seekTo((int)(gifMinuteChange * curTime));
+            //gifBackgroundController.seekTo((int)(gifMinuteChange * curTime));
             gifBackgroundController.setSpeed(0.001f);
         }
     }

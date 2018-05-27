@@ -38,7 +38,7 @@ public final class NetworkUtils {
     private static final String TAG = NetworkUtils.class.getSimpleName();
 
     private static final String SERVER_URL =
-                "http://192.168.1.140:3000/users/";
+                "http://178.169.176.184:8000/users/";
     //"http://178.169.176.184:8000/users/";
 
     //private static final String USER_ID = null;
@@ -84,7 +84,9 @@ public final class NetworkUtils {
                 httpCon.getOutputStream());
         out.write(data.toString());
         out.close();
-        httpCon.getInputStream();
+        Scanner scanner = new Scanner(httpCon.getInputStream());
+        Log.d("Request response", scanner.nextLine());
+
 
     }
 
