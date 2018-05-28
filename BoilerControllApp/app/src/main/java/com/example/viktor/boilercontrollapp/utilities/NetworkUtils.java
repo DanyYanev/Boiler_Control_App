@@ -110,7 +110,7 @@ public final class NetworkUtils {
 
 
             JSONObject response = new JSONObject(jsonServerResponse);
-            JSONArray jsonValues = response.getJSONArray("values");
+            JSONArray jsonValues = response.getJSONArray("values_attributes");
 
             for(int i = 0 ;  i < jsonValues.length() ; ++ i){
                 JSONObject jsonObject = jsonValues.getJSONObject(i);

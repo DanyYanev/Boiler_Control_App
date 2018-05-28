@@ -15,25 +15,18 @@ import org.json.JSONObject;
 import java.io.IOException;
 
 /**
- * Created by viktor on 5/27/18.
+ * Created by viktor on 5/28/18.
  */
 
-public class ExtendedButton {
+public abstract class Extended {
     Integer state;
     String name;
     String propName;
-    Button button;
 
-    public ExtendedButton(Integer state, String name, String propName, Button button) {
+    public Extended(Integer state, String name, String propName) {
         this.state = state;
         this.name = name;
         this.propName = propName;
-        this.button = button;
-
-        setCurrentBackgroundResource();
-
-        initOnClickListener(button);
-
     }
 
     public Integer getState() {
@@ -42,26 +35,8 @@ public class ExtendedButton {
 
     public void setState(Integer state) {
         this.state = state;
-        setCurrentBackgroundResource();
     }
 
-    void setCurrentBackgroundResource(){
-        if(state == 0)
-            button.setBackgroundResource(R.drawable.button_off_on_transition);
-        else
-            button.setBackgroundResource(R.drawable.button_on_off_transition);
-    }
-
-    void initOnClickListener(final Button button){
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                state = state == 0 ? 1 : 0;
-                sendDataToServer(propName, state.toString());
-
-            }
-        });
-    }
 
     void sendDataToServer(String field, String value){
         String data_arr[] = {"12345", field, value};
@@ -69,7 +44,6 @@ public class ExtendedButton {
     }
 
     class ServerPutRequestTask extends AsyncTask<String[], Void, Void> {
-
 
         @Override
         protected void onPreExecute() {
@@ -107,23 +81,7 @@ public class ExtendedButton {
         }
     }
 
-    void asyncOnPostExecute(){
-        int duration = 1000;
-        ObjectAnimator animation = ObjectAnimator.ofFloat(button, "translationX", 0f);
-        animation.setDuration(duration);
-        animation.start();
-    }
+    protected abstract void asyncOnPreExecute();
+    protected abstract void asyncOnPostExecute();
 
-    void asyncOnPreExecute() {
-        int duration = 1000;
-        ObjectAnimator animation = ObjectAnimator.ofFloat(button, "translationX", 1000f);
-        animation.setDuration(duration);
-        animation.start();
-        if(state == 1)
-            button.setBackgroundResource(R.drawable.button_off_on_transition);
-        else
-            button.setBackgroundResource(R.drawable.button_on_off_transition);
-        TransitionDrawable transition = (TransitionDrawable) button.getBackground();
-        transition.startTransition(duration);
-    }
 }

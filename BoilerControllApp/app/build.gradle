@@ -33,4 +33,5 @@ dependencies {
     compile 'br.com.simplepass:loading-button-android:1.12.1'
     compile 'pl.droidsonroids.gif:android-gif-drawable:1.2.3'
     implementation project(':flexibleciruclarseekbar')
+    implementation 'com.github.GwonHyeok:StickySwitch:0.0.15'
 }

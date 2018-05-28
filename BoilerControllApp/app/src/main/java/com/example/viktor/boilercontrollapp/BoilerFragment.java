@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,10 +24,13 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.HashMap;
 
+import io.ghyeok.stickyswitch.widget.StickySwitch;
+
 public class BoilerFragment extends Fragment {
 
     CircularSeekBar mTemperatureBar;
     CircularSeekBar mHysteresisBar;
+    StickySwitch stickySwitch;
 
     TextView tvTemperature;
     TextView tvHysteresis;
@@ -50,6 +54,8 @@ public class BoilerFragment extends Fragment {
 
         tvTemperature = getView().findViewById(R.id.temperature_text_view);
         tvHysteresis = getView().findViewById(R.id.hysteresis_text_view);
+
+        stickySwitch = getView().findViewById(R.id.sticky_switch);
 
         setSeekBar(mTemperatureBar);
         setSeekBar(mHysteresisBar);
@@ -78,6 +84,7 @@ public class BoilerFragment extends Fragment {
             @Override
             public void onProgressChanged(CircularSeekBar CircularSeekBar, float progress, boolean fromUser) {
                 tvHysteresis.setText(Integer.toString((int)progress) + "\u00B0" + "C");
+                Log.d("Swiper progress", Float.toString(progress));
                 new ServerPutRequestTask().execute(new String[]{"12345", "HTempSet", Integer.toString((int) progress)});
             }
 
@@ -91,6 +98,17 @@ public class BoilerFragment extends Fragment {
 
             }
         });
+
+        stickySwitch.setOnSelectedChangeListener(new StickySwitch.OnSelectedChangeListener() {
+
+            @Override
+            public void onSelectedChange(StickySwitch.Direction direction, String s) {
+                new ServerPutRequestTask().execute(new String[]{"12345", "BoilerSource",
+                        (direction.equals(StickySwitch.Direction.LEFT) ? "1" : "0")});
+                new ServerPutRequestTask().execute(new String[]{"12345", "HeatingSource",
+                        (direction.equals(StickySwitch.Direction.LEFT) ? "0" : "1")});
+            }
+        });
     }
 
     void setSeekBar(CircularSeekBar seekBar){
@@ -98,7 +116,6 @@ public class BoilerFragment extends Fragment {
         //seekBar.setDotMarkers(true);
         seekBar.setRoundedEdges(true);
         seekBar.setIsGradient(true);
-        seekBar.setPopup(true);
         seekBar.setSweepAngle(270);
         seekBar.setArcRotation(225);
         seekBar.setArcThickness(30);
@@ -140,8 +157,12 @@ public class BoilerFragment extends Fragment {
         protected void onPostExecute(HashMap<String, String> values) {
 //            mLoadingIndicator.setVisibility(View.INVISIBLE);
             if(!values.isEmpty()){
-                tvTemperature.setText(values.get("BTemp") + "\u00B0" + "C");
-                tvHysteresis.setText(values.get("HTemp") + "\u00B0" + "C");
+                tvTemperature.setText(values.get("BTempSet") + "\u00B0" + "C");
+                tvHysteresis.setText(values.get("HTempSet") + "\u00B0" + "C");
+                mTemperatureBar.setProgress(Integer.parseInt(values.get("BTempSet")));
+                mHysteresisBar.setProgress(Integer.parseInt(values.get("HTempSet")));
+                stickySwitch.setDirection(values.get("BoilerSource").equals("1") ?
+                        StickySwitch.Direction.LEFT : StickySwitch.Direction.RIGHT, false, false);
             }else{
                 Toast.makeText(getActivity(), "Connection Error Occurred", Toast.LENGTH_LONG).show();
             }
@@ -165,7 +186,7 @@ public class BoilerFragment extends Fragment {
                 dataJson.put("controller_token", "testing");
                 JSONObject values = new JSONObject();
                 values.put("key", data[1]);
-                values.put("value", Integer.getInteger(data[2]));
+                values.put("value", data[2]);
 
                 dataJson.put("values_attributes", new JSONArray().put(values));
                 try {

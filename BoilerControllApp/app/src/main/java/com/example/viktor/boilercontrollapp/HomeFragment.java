@@ -70,17 +70,12 @@ public class HomeFragment extends Fragment {
     }
 
     private void initButtons() {
-        bBoiler = new ExtendedButton(false, "Boiler", "BoilerPic", (Button) getView().findViewById(R.id.boiler_button));
-        bPool = new ExtendedButton(false, "Pool", "PoolPump", (Button) getView().findViewById(R.id.pool_button));
-        bHeating = new ExtendedButton(false, "Heating", "HeatingPic", (Button) getView().findViewById(R.id.heating_button));
+        bBoiler = new ExtendedButton(0, "Boiler", "BoilerPic", (Button) getView().findViewById(R.id.boiler_button));
+        bPool = new ExtendedButton(0, "Pool", "PoolPump", (Button) getView().findViewById(R.id.pool_button));
+        bHeating = new ExtendedButton(0, "Heating", "HeatingPic", (Button) getView().findViewById(R.id.heating_button));
 
         setDataFromServer();
-        if (getRequestValues != null) {
-            bBoiler.setState(!getRequestValues.get("BoilerPic").equals("0"));
-            bPool.setState(!getRequestValues.get("PoolPump").equals("0"));
-            bHeating.setState(!getRequestValues.get("HeatingPic").equals("0"));
 
-        }
     }
     void setDataFromServer(){
         URL apiURL = NetworkUtils.buildUrl("12345.json");
@@ -123,6 +118,14 @@ public class HomeFragment extends Fragment {
 //            mLoadingIndicator.setVisibility(View.INVISIBLE);
             if(!values.isEmpty()){
                 getRequestValues = new HashMap<>(values);
+
+                if (getRequestValues != null) {
+                    Log.d("Hello", "Hello");
+                    bBoiler.setState(Integer.parseInt(getRequestValues.get("BoilerPic")));
+                    bPool.setState(Integer.parseInt(getRequestValues.get("PoolPump")));
+                    bHeating.setState(Integer.parseInt(getRequestValues.get("HeatingPic")));
+
+                }
             }else{
                 Toast.makeText(getActivity(), "Connection Error Occurred", Toast.LENGTH_LONG).show();
             }
@@ -131,17 +134,16 @@ public class HomeFragment extends Fragment {
 
     class SetBackgroundThread extends Thread{
         public void run(){
-            gifBackground = (GifImageView) getView().findViewById(R.id.background_gif);
+
+            gifBackground = getView().findViewById(R.id.background_gif);
             gifBackgroundController = (GifDrawable) gifBackground.getDrawable();
 
-            int durationGif = gifBackgroundController.getDuration();
             Calendar calendar = Calendar.getInstance();
-            double gifMinuteChange = durationGif / (24 * 60);
+            double gifMinuteChange = gifBackgroundController.getDuration() / (24 * 60);
             double curTime = (calendar.get(Calendar.MINUTE) +  (calendar.get(Calendar.HOUR_OF_DAY) * 60 ) + 3*60) % (24 * 60);
-            Log.e("Time: ", (Integer.toString(calendar.get(Calendar.HOUR))) + ":" + Integer.toString(calendar.get(Calendar.MINUTE)));
+
             gifBackgroundController.setSpeed(4.0f);
             while(gifBackgroundController.getCurrentPosition() / 50 != (int)(gifMinuteChange * curTime) / 50);
-            //gifBackgroundController.seekTo((int)(gifMinuteChange * curTime));
             gifBackgroundController.setSpeed(0.001f);
         }
     }
