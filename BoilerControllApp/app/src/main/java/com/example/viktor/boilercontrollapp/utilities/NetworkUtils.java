@@ -61,21 +61,7 @@ public final class NetworkUtils {
         return url;
     }
 
-    public static void sendPostRequestToServer(JSONObject data, URL url) throws IOException {
-//        HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-//
-//            urlConnection.setRequestMethod("PUT");
-//            //
-//
-//            urlConnection.setDoInput(true);
-//            //urlConnection.setFixedLengthStreamingMode(data.toString().length());
-//
-//            OutputStreamWriter out = new OutputStreamWriter(urlConnection.getOutputStream());
-//            Log.d("JsonData", data.toString());
-//            out.write(data.toString());
-//            out.close();
-//
-//            urlConnection.disconnect();
+    public static int sendPostRequestToServer(JSONObject data, URL url) throws IOException {
         HttpURLConnection httpCon = (HttpURLConnection) url.openConnection();
         httpCon.setDoOutput(true);
         httpCon.setRequestMethod("PUT");
@@ -84,8 +70,9 @@ public final class NetworkUtils {
                 httpCon.getOutputStream());
         out.write(data.toString());
         out.close();
-        Scanner scanner = new Scanner(httpCon.getInputStream());
-        Log.d("Request response", scanner.nextLine());
+        int responseCode = httpCon.getResponseCode();
+        Log.d("Request response", Integer.toString(responseCode));
+        return responseCode;
 
 
     }

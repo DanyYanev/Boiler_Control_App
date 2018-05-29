@@ -1,7 +1,5 @@
 package com.example.viktor.boilercontrollapp;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -28,12 +26,11 @@ import io.ghyeok.stickyswitch.widget.StickySwitch;
 
 public class BoilerFragment extends Fragment {
 
-    CircularSeekBar mTemperatureBar;
-    CircularSeekBar mHysteresisBar;
-    StickySwitch stickySwitch;
+    ExtendedStickySwitch stickySwitch;
 
-    TextView tvTemperature;
-    TextView tvHysteresis;
+    ExtendedCircularSeekBar mTemperatureBar;
+    ExtendedCircularSeekBar mHysteresisBar;
+
     public BoilerFragment() {
         // Required empty public constructor
     }
@@ -49,88 +46,24 @@ public class BoilerFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mTemperatureBar = getView().findViewById(R.id.temperature_seek_bar);
-        mHysteresisBar = getView().findViewById(R.id.hysteresis_seek_bar);
+        mTemperatureBar = new ExtendedCircularSeekBar(20, "TemperatureBar", "BTempSet",
+                (CircularSeekBar) getView().findViewById(R.id.temperature_seek_bar), (TextView) getView().findViewById(R.id.temperature_text_view));
 
-        tvTemperature = getView().findViewById(R.id.temperature_text_view);
-        tvHysteresis = getView().findViewById(R.id.hysteresis_text_view);
+        mHysteresisBar = new ExtendedCircularSeekBar(20, "HysteresisBar", "HTempSet",
+                (CircularSeekBar) getView().findViewById(R.id.hysteresis_seek_bar), (TextView) getView().findViewById(R.id.hysteresis_text_view));
 
-        stickySwitch = getView().findViewById(R.id.sticky_switch);
+        stickySwitch = new ExtendedStickySwitch(0, "BoilerHeatingSwitch", "BoilerSource", "HeatingSource",
+                (StickySwitch)getView().findViewById(R.id.sticky_switch));
 
-        setSeekBar(mTemperatureBar);
-        setSeekBar(mHysteresisBar);
-
-        new ServerGetRequestTask().execute(NetworkUtils.buildUrl("12345.json"));
-
-        mTemperatureBar.setOnCircularSeekBarChangeListener(new CircularSeekBar.OnCircularSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(CircularSeekBar CircularSeekBar, float progress, boolean fromUser) {
-                tvTemperature.setText(Integer.toString((int)progress) + "\u00B0" + "C");
-                new ServerPutRequestTask().execute(new String[]{"12345", "BTempSet", Integer.toString((int) progress)});
-            }
-
-            @Override
-            public void onStartTrackingTouch(CircularSeekBar CircularSeekBar) {
-
-            }
-
-            @Override
-            public void onStopTrackingTouch(CircularSeekBar CircularSeekBar) {
-
-            }
-        });
-
-        mHysteresisBar.setOnCircularSeekBarChangeListener(new CircularSeekBar.OnCircularSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(CircularSeekBar CircularSeekBar, float progress, boolean fromUser) {
-                tvHysteresis.setText(Integer.toString((int)progress) + "\u00B0" + "C");
-                Log.d("Swiper progress", Float.toString(progress));
-                new ServerPutRequestTask().execute(new String[]{"12345", "HTempSet", Integer.toString((int) progress)});
-            }
-
-            @Override
-            public void onStartTrackingTouch(CircularSeekBar CircularSeekBar) {
-
-            }
-
-            @Override
-            public void onStopTrackingTouch(CircularSeekBar CircularSeekBar) {
-
-            }
-        });
-
-        stickySwitch.setOnSelectedChangeListener(new StickySwitch.OnSelectedChangeListener() {
-
-            @Override
-            public void onSelectedChange(StickySwitch.Direction direction, String s) {
-                new ServerPutRequestTask().execute(new String[]{"12345", "BoilerSource",
-                        (direction.equals(StickySwitch.Direction.LEFT) ? "1" : "0")});
-                new ServerPutRequestTask().execute(new String[]{"12345", "HeatingSource",
-                        (direction.equals(StickySwitch.Direction.LEFT) ? "0" : "1")});
-            }
-        });
+        setDataFromServer();
     }
 
-    void setSeekBar(CircularSeekBar seekBar){
-        seekBar.setDrawMarkings(true);
-        //seekBar.setDotMarkers(true);
-        seekBar.setRoundedEdges(true);
-        seekBar.setIsGradient(true);
-        seekBar.setSweepAngle(270);
-        seekBar.setArcRotation(225);
-        seekBar.setArcThickness(30);
-        seekBar.setMin(10);
-        seekBar.setMax(50);
-        seekBar.setProgress(20);
-        seekBar.setIncreaseCenterNeedle(20);
-        seekBar.setValueStep(1);
-        seekBar.setNeedleFrequency(1);
-        seekBar.setNeedleDistanceFromCenter(32);
-        seekBar.setNeedleLengthInDP(12);
-        seekBar.setIncreaseCenterNeedle(24);
-        seekBar.setNeedleThickness(1);
-        seekBar.setHeightForPopupFromThumb(10);
+    void setDataFromServer(){
+        URL apiURL = NetworkUtils.buildUrl("12345.json");
+        new ServerGetRequestTask().execute(apiURL);
+        return;
     }
+
 
     class ServerGetRequestTask extends AsyncTask<URL, Void, HashMap<String, String>> {
 //        @Override
@@ -157,12 +90,10 @@ public class BoilerFragment extends Fragment {
         protected void onPostExecute(HashMap<String, String> values) {
 //            mLoadingIndicator.setVisibility(View.INVISIBLE);
             if(!values.isEmpty()){
-                tvTemperature.setText(values.get("BTempSet") + "\u00B0" + "C");
-                tvHysteresis.setText(values.get("HTempSet") + "\u00B0" + "C");
-                mTemperatureBar.setProgress(Integer.parseInt(values.get("BTempSet")));
-                mHysteresisBar.setProgress(Integer.parseInt(values.get("HTempSet")));
-                stickySwitch.setDirection(values.get("BoilerSource").equals("1") ?
-                        StickySwitch.Direction.LEFT : StickySwitch.Direction.RIGHT, false, false);
+                mTemperatureBar.setState(Integer.parseInt(values.get("BTempSet")));
+                mHysteresisBar.setState(Integer.parseInt(values.get("HTempSet")));
+
+                stickySwitch.setState(Integer.parseInt(values.get("BoilerSource")));
             }else{
                 Toast.makeText(getActivity(), "Connection Error Occurred", Toast.LENGTH_LONG).show();
             }

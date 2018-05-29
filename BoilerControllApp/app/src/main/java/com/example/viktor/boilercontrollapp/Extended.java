@@ -3,6 +3,7 @@ package com.example.viktor.boilercontrollapp;
 import android.animation.ObjectAnimator;
 import android.graphics.drawable.TransitionDrawable;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
@@ -20,11 +21,13 @@ import java.io.IOException;
 
 public abstract class Extended {
     Integer state;
+    Integer prevState;
     String name;
     String propName;
 
     public Extended(Integer state, String name, String propName) {
         this.state = state;
+        prevState = this.state;
         this.name = name;
         this.propName = propName;
     }
@@ -53,6 +56,7 @@ public abstract class Extended {
         @Override
         protected Void doInBackground(String[]... strings) {
             String data[] = strings[0];
+            int responseCode = 0;
 
             try {
 
@@ -65,7 +69,10 @@ public abstract class Extended {
 
                 dataJson.put("values_attributes", new JSONArray().put(values));
                 try {
-                    NetworkUtils.sendPostRequestToServer(dataJson, NetworkUtils.buildUrl(data[0]));
+                    responseCode  = NetworkUtils.sendPostRequestToServer(dataJson, NetworkUtils.buildUrl(data[0] + ".json"));
+                    if(responseCode != 200){
+                        state = prevState;
+                    }
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
