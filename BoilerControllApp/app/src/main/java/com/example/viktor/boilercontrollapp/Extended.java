@@ -69,15 +69,16 @@ public abstract class Extended {
 
                 dataJson.put("values_attributes", new JSONArray().put(values));
                 try {
-                    responseCode  = NetworkUtils.sendPostRequestToServer(dataJson, NetworkUtils.buildUrl(data[0] + ".json"));
-                    if(responseCode != 200){
-                        state = prevState;
-                    }
+                    responseCode = NetworkUtils.sendPostRequestToServer(dataJson, NetworkUtils.buildUrl(data[0]));
                 } catch (IOException e) {
+                    responseCode = 0;
                     e.printStackTrace();
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
+            }
+            if(responseCode != 200){
+                state = prevState;
             }
             return null;
         }

@@ -65,6 +65,11 @@ public class ExtendedButton extends Extended{
                 button.setBackgroundResource(R.drawable.button_on_off_transition);
             TransitionDrawable transition = (TransitionDrawable) button.getBackground();
             transition.startTransition(duration);
+        }else{
+            ObjectAnimator animation = ObjectAnimator.ofFloat(button, "translationY", -10f, 10f);
+            animation.setDuration(100);
+            animation.setRepeatCount(2);
+            animation.start();
         }
         ObjectAnimator animation = ObjectAnimator.ofFloat(button, "translationX", 0f);
         animation.setDuration(duration);

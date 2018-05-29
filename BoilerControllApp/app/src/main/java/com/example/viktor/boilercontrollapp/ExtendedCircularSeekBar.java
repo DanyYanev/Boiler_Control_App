@@ -1,5 +1,6 @@
 package com.example.viktor.boilercontrollapp;
 
+import android.animation.ObjectAnimator;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
@@ -62,9 +63,6 @@ public class ExtendedCircularSeekBar extends Extended {
             @Override
             public void onProgressChanged(CircularSeekBar CircularSeekBar, float progress, boolean fromUser) {
                 tvProgress.setText(Integer.toString((int) progress) + "\u00B0" + "C");
-                prevState = state;
-                state = (int)progress;
-                new ServerPutRequestTask().execute(new String[]{"12345", propName, state.toString()});
             }
 
             @Override
@@ -74,7 +72,9 @@ public class ExtendedCircularSeekBar extends Extended {
 
             @Override
             public void onStopTrackingTouch(CircularSeekBar CircularSeekBar) {
-
+                prevState = state;
+                state = (int) CircularSeekBar.getProgress();
+                new ServerPutRequestTask().execute(new String[]{"12345", propName, state.toString()});
             }
         });
     }
@@ -86,6 +86,16 @@ public class ExtendedCircularSeekBar extends Extended {
 
     @Override
     protected void asyncOnPostExecute() {
-
+        if(state == prevState){
+            setState(state);
+            ObjectAnimator animation = ObjectAnimator.ofFloat(seekBar, "translationX", -10f, 10f);
+            ObjectAnimator textAnimation = ObjectAnimator.ofFloat(tvProgress, "translationX", -10f, 10f);
+            animation.setDuration(100);
+            textAnimation.setDuration(100);
+            animation.setRepeatCount(2);
+            textAnimation.setRepeatCount(2);
+            animation.start();
+            textAnimation.start();
+        }
     }
 }

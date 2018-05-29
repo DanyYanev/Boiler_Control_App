@@ -1,5 +1,9 @@
 package com.example.viktor.boilercontrollapp;
 
+import android.animation.ObjectAnimator;
+import android.util.Log;
+import android.view.animation.BounceInterpolator;
+
 import io.ghyeok.stickyswitch.widget.StickySwitch;
 
 /**
@@ -23,8 +27,9 @@ public class ExtendedStickySwitch extends Extended{
     public void setState(Integer state) {
         prevState = state;
         this.state = state;
-        stickySwitch.setDirection(state == 1 ?
-                StickySwitch.Direction.LEFT : StickySwitch.Direction.RIGHT, false, false);;
+        stickySwitch.setDirection(state == 0 ?
+                StickySwitch.Direction.LEFT : StickySwitch.Direction.RIGHT, false, false);
+
     }
 
     public void initSetOnSelectedChangeListener(StickySwitch stickySwitch) {
@@ -44,11 +49,18 @@ public class ExtendedStickySwitch extends Extended{
 
     @Override
     protected void asyncOnPreExecute() {
-
+        stickySwitch.setDirection(state == 1 ?
+                StickySwitch.Direction.LEFT : StickySwitch.Direction.RIGHT, false, false);
     }
 
     @Override
     protected void asyncOnPostExecute() {
+        if(state == prevState){
+            ObjectAnimator animation = ObjectAnimator.ofFloat(stickySwitch, "translationX", -10f, 10f);
+            animation.setDuration(100);
+            animation.setRepeatCount(2);
+            animation.start();
+        }
         setState(state);
     }
 }
