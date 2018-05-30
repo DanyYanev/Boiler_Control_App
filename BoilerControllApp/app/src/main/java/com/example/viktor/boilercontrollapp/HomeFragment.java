@@ -72,7 +72,7 @@ public class HomeFragment extends Fragment {
             public void onRefresh() {
                 URL apiURL = NetworkUtils.buildUrl("12345.json");
                 Extended[] buttons = {bBoiler, bPool, bHeating};
-                new ServerGetRequestTask(buttons, refreshLayout).execute(apiURL);
+                new ServerGetRequestTask(buttons, refreshLayout, getContext()).execute(apiURL);
             }
         });
     }

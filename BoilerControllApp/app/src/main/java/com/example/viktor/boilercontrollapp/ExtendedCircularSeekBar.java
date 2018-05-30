@@ -85,6 +85,10 @@ public class ExtendedCircularSeekBar extends Extended {
         tvProgress.setText(state + "\u00B0" + "C");
     }
 
+    public void setRefreshLayout(SwipeRefreshLayout refreshLayout) {
+        this.refreshLayout = refreshLayout;
+    }
+
     void setProperties(CircularSeekBar seekBar){
         seekBar.setDrawMarkings(true);
         //seekBar.setDotMarkers(true);

@@ -25,7 +25,7 @@ public class ServerGetRequestTask extends AsyncTask<URL, Void, HashMap<String, S
     Integer responseCode;
     Context context;
 
-    public ServerGetRequestTask(Extended[] buttons, Context context){
+    public ServerGetRequestTask(Extended[] buttons,Context context){
         this.buttons = buttons;
         this.context = context;
     }
@@ -34,9 +34,10 @@ public class ServerGetRequestTask extends AsyncTask<URL, Void, HashMap<String, S
         return responseCode;
     }
 
-    public ServerGetRequestTask(Extended[] buttons, SwipeRefreshLayout refreshLayout){
+    public ServerGetRequestTask(Extended[] buttons, SwipeRefreshLayout refreshLayout, Context context){
         this.buttons = buttons;
         this.refreshLayout = refreshLayout;
+        this.context = context;
     }
 
     @Override

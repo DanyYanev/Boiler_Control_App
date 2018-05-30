@@ -43,14 +43,14 @@ public class BoilerFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
         refreshLayout = getView().findViewById(R.id.refresh_layout);
-        initOnRefreshListener(refreshLayout);
+
 
         mTemperatureBar = new ExtendedCircularSeekBar(40, "TemperatureBar", "BTempSet",
                 (CircularSeekBar) getView().findViewById(R.id.temperature_seek_bar),
                 (TextView) getView().findViewById(R.id.temperature_text_view), (TextView) getView().findViewById(R.id.temperature_text_field),
                 getActivity(), refreshLayout);
 
-        mHysteresisBar = new ExtendedCircularSeekBar(40, "HysteresisBar", "HTempSet",
+        mHysteresisBar = new ExtendedCircularSeekBar(40, "HysteresisBar", "BHistSet",
                 (CircularSeekBar) getView().findViewById(R.id.hysteresis_seek_bar),
                 (TextView) getView().findViewById(R.id.hysteresis_text_view), (TextView) getView().findViewById(R.id.hysteresis_text_field),
                 getActivity(), refreshLayout);
@@ -58,6 +58,9 @@ public class BoilerFragment extends Fragment {
         stickySwitch = new ExtendedStickySwitch(1, "BoilerHeatingSwitch", "BoilerSource",
                 (StickySwitch)getView().findViewById(R.id.sticky_switch));
 
+        initOnRefreshListener(refreshLayout);
+        mTemperatureBar.setRefreshLayout(refreshLayout);
+        mHysteresisBar.setRefreshLayout(refreshLayout);
         setDataFromServer();
     }
 
@@ -67,7 +70,7 @@ public class BoilerFragment extends Fragment {
             public void onRefresh() {
                 URL apiURL = NetworkUtils.buildUrl("12345.json");
                 Extended[] buttons = {mTemperatureBar, mHysteresisBar, stickySwitch};
-                new ServerGetRequestTask(buttons, refreshLayout).execute(apiURL);
+                new ServerGetRequestTask(buttons, refreshLayout, getActivity()).execute(apiURL);
             }
         });
     }
@@ -75,6 +78,6 @@ public class BoilerFragment extends Fragment {
     void setDataFromServer(){
         URL apiURL = NetworkUtils.buildUrl("12345.json");
         Extended[] buttons = {mTemperatureBar, mHysteresisBar, stickySwitch};
-        new ServerGetRequestTask(buttons, getContext()).execute(apiURL);
+        new ServerGetRequestTask(buttons, getActivity()).execute(apiURL);
     }
 }

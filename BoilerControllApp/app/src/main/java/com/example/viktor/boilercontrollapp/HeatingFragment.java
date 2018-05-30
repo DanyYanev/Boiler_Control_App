@@ -52,7 +52,6 @@ public class HeatingFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
         refreshLayout = getView().findViewById(R.id.refresh_layout);
-        initOnRefreshListener(refreshLayout);
 
         sourceStickySwitch = new ExtendedStickySwitch(1, "BoilerPumpSwitch", "HeatingSource",
                 (StickySwitch)getView().findViewById(R.id.source_sticky_switch));
@@ -69,6 +68,9 @@ public class HeatingFragment extends Fragment {
         bFloorConvector = new ExtendedButton(0, "FloorConvector", "FloorConvPump",
                 (Button) getView().findViewById(R.id.floor_convector_button));
 
+        initOnRefreshListener(refreshLayout);
+        mTemperatureBar.setRefreshLayout(refreshLayout);
+
 
         setDataFromServer();
 
@@ -80,7 +82,7 @@ public class HeatingFragment extends Fragment {
             public void onRefresh() {
                 URL apiURL = NetworkUtils.buildUrl("12345.json");
                 Extended[] buttons = {sourceStickySwitch, mTemperatureBar, bFloor, bConvector, bFloorConvector};
-                new ServerGetRequestTask(buttons, refreshLayout).execute(apiURL);
+                new ServerGetRequestTask(buttons, refreshLayout, getActivity()).execute(apiURL);
             }
         });
     }
@@ -88,6 +90,6 @@ public class HeatingFragment extends Fragment {
     void setDataFromServer(){
         URL apiURL = NetworkUtils.buildUrl("12345.json");
         Extended[] buttons = {sourceStickySwitch, mTemperatureBar, bFloor, bConvector, bFloorConvector};
-        new ServerGetRequestTask(buttons, getContext()).execute(apiURL);
+        new ServerGetRequestTask(buttons, getActivity()).execute(apiURL);
     }
 }
