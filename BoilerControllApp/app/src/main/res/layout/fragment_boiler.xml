@@ -1,73 +1,99 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.SwipeRefreshLayout  xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/refresh_layout"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     tools:context="com.example.viktor.boilercontrollapp.BoilerFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-
-    <io.ghyeok.stickyswitch.widget.StickySwitch
-        android:id="@+id/sticky_switch"
+    <RelativeLayout
         android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/temperature_seek_bar"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="38dp"
-        app:ss_animationDuration="600"
-        app:ss_animationType="line"
-        app:ss_iconPadding="18dp"
-        app:ss_iconSize="22dp"
-        app:ss_leftIcon="@drawable/ic_heater"
-        app:ss_leftText="Boiler"
-        app:ss_rightIcon="@drawable/ic_thermometer"
-        app:ss_rightText="Heater"
-        app:ss_selectedTextSize="14sp"
-        app:ss_sliderBackgroundColor="#EAEAEA"
-        app:ss_switchColor="#5ed6ff"
-        app:ss_textColor="@android:color/black"
-        app:ss_textSize="12sp"
-        android:layout_marginLeft="50dp"
-        android:layout_marginRight="50dp" />
+        <!-- TODO: Update blank fragment layout -->
 
-    <TextView
-        android:id="@+id/temperature_text_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/temperature_seek_bar"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="98dp"
-        android:text="0" />
+        <io.ghyeok.stickyswitch.widget.StickySwitch
+            android:id="@+id/sticky_switch"
+            android:layout_width="match_parent"
 
-    <TextView
-        android:id="@+id/hysteresis_text_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/hysteresis_seek_bar"
-        android:layout_alignStart="@+id/temperature_text_view"
-        android:layout_marginBottom="95dp"
-        android:text="0" />
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/temperature_seek_bar"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="38dp"
+            app:ss_animationDuration="600"
+            app:ss_animationType="line"
+            app:ss_iconPadding="18dp"
+            app:ss_iconSize="22dp"
+            app:ss_leftIcon="@drawable/ic_heater"
+            app:ss_leftText="Boiler"
+            app:ss_rightIcon="@drawable/ic_thermometer"
+            app:ss_rightText="Heater"
+            app:ss_selectedTextSize="14sp"
+            app:ss_sliderBackgroundColor="#EAEAEA"
+            app:ss_switchColor="#5ed6ff"
+            app:ss_textColor="@android:color/black"
+            app:ss_textSize="12sp"
+            android:layout_marginLeft="50dp"
+            android:layout_marginRight="50dp" />
 
-    <com.skumar.flexibleciruclarseekbar.CircularSeekBar
-        android:id="@+id/temperature_seek_bar"
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:layout_above="@+id/hysteresis_seek_bar"
-        android:layout_centerHorizontal="true"
-        android:layout_marginLeft="40dp"
-        android:layout_marginRight="40dp"
-        android:padding="20dp"/>
+        <TextView
+            android:id="@+id/temperature_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/temperature_text_field"
+            android:layout_marginBottom="4dp"
+            android:layout_centerHorizontal="true"
+            android:text="0000" />
 
-    <com.skumar.flexibleciruclarseekbar.CircularSeekBar
-        android:id="@+id/hysteresis_seek_bar"
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginLeft="40dp"
-        android:layout_marginRight="40dp"
-        android:padding="20dp"/>
+        <TextView
+            android:id="@+id/hysteresis_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/temperature_seek_bar"
+            android:layout_marginTop="75dp"
+            android:text="0000" />
 
-</RelativeLayout>
+        <com.skumar.flexibleciruclarseekbar.CircularSeekBar
+            android:id="@+id/temperature_seek_bar"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_above="@+id/hysteresis_seek_bar"
+            android:layout_centerHorizontal="true"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp"
+            android:padding="20dp"/>
+
+        <com.skumar.flexibleciruclarseekbar.CircularSeekBar
+            android:id="@+id/hysteresis_seek_bar"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp"
+            android:padding="20dp"/>
+
+        <TextView
+            android:id="@+id/temperature_text_field"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/hysteresis_seek_bar"
+            android:layout_centerHorizontal="true"
+            android:textStyle="bold"
+            android:layout_marginBottom="86dp"
+            android:text="Temperature" />
+
+        <TextView
+            android:id="@+id/hysteresis_text_field"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:textStyle="bold"
+            android:layout_alignTop="@+id/hysteresis_text_view"
+            android:layout_marginTop="23dp"
+            android:text="Hysteresis" />
+
+    </RelativeLayout>
+</android.support.v4.widget.SwipeRefreshLayout>

@@ -1,6 +1,10 @@
 package com.example.viktor.boilercontrollapp;
 
 import android.animation.ObjectAnimator;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
@@ -16,11 +20,32 @@ import org.w3c.dom.Text;
 public class ExtendedCircularSeekBar extends Extended {
     CircularSeekBar seekBar;
     TextView tvProgress;
+    TextView tvName;
+    SwipeRefreshLayout refreshLayout;
+    SharedPreferences sharedPreferences;
+    Context context;
+    int min_val;
+    int max_val;
+    int fahrenheit_val;
 
-    public ExtendedCircularSeekBar(Integer state, String name, String propName, CircularSeekBar seekBar, TextView tvProgress) {
+    public ExtendedCircularSeekBar(Integer state, String name, String propName, CircularSeekBar seekBar, TextView tvProgress,
+                                   TextView tvName, Context context) {
         super(state, name, propName);
         this.seekBar = seekBar;
         this.tvProgress = tvProgress;
+        this.tvName = tvName;
+        this.context = context;
+        min_val = 30;
+        max_val = 70;
+
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        String degree_system = sharedPreferences.getString("Degree System", "");
+
+        if(degree_system.equals("Fahrenheit")){
+            min_val = convertToFahrenheit(min_val);
+            max_val = convertToFahrenheit(max_val);
+            this.state = convertToFahrenheit(this.state);
+        }
 
         setProperties(seekBar);
         setState(this.state);
@@ -28,11 +53,35 @@ public class ExtendedCircularSeekBar extends Extended {
 
     }
 
+    public ExtendedCircularSeekBar(Integer state, String name, String propName, CircularSeekBar seekBar, TextView tvProgress,
+                                   TextView tvName, Context context, SwipeRefreshLayout refreshLayout) {
+        super(state, name, propName);
+        this.seekBar = seekBar;
+        this.tvProgress = tvProgress;
+        this.tvName = tvName;
+        this.context = context;
+        this.refreshLayout = refreshLayout;
+        min_val = 30;
+        max_val = 70;
+
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        String degree_system = sharedPreferences.getString("Degree System", "");
+
+        if(degree_system.equals("Fahrenheit")){
+            min_val = (int) (min_val * 1.8 + 32);
+            max_val =(int) (max_val * 1.8 + 32);
+            this.state = (int) (this.state * 1.8 + 32);
+        }
+
+        setProperties(seekBar);
+        setState(this.state);
+        initOnCircilarSeekBarChangeListener(seekBar);
+    }
+
     @Override
     public void setState(Integer state){
         prevState = this.state;
         this.state = state;
-
         seekBar.setProgress(state);
         tvProgress.setText(state + "\u00B0" + "C");
     }
@@ -45,9 +94,9 @@ public class ExtendedCircularSeekBar extends Extended {
         seekBar.setSweepAngle(270);
         seekBar.setArcRotation(225);
         seekBar.setArcThickness(30);
-        seekBar.setMin(10);
-        seekBar.setMax(50);
-        seekBar.setProgress(20);
+        seekBar.setMin(min_val);
+        seekBar.setMax(max_val);
+        seekBar.setProgress(50);
         seekBar.setIncreaseCenterNeedle(20);
         seekBar.setValueStep(1);
         seekBar.setNeedleFrequency(1);
@@ -67,7 +116,7 @@ public class ExtendedCircularSeekBar extends Extended {
 
             @Override
             public void onStartTrackingTouch(CircularSeekBar CircularSeekBar) {
-
+                if(refreshLayout != null)refreshLayout.setEnabled(false);
             }
 
             @Override
@@ -75,27 +124,40 @@ public class ExtendedCircularSeekBar extends Extended {
                 prevState = state;
                 state = (int) CircularSeekBar.getProgress();
                 new ServerPutRequestTask().execute(new String[]{"12345", propName, state.toString()});
+
+                if(refreshLayout != null)refreshLayout.setEnabled(true);
             }
         });
     }
 
+    int convertToCelsius(int val){
+        return (int) ((val - 32) / 1.8);
+    }
+
+    int convertToFahrenheit(int val){
+        return (int) (min_val * 1.8 + 32);
+    }
+
     @Override
     protected void asyncOnPreExecute() {
-
+       if(sharedPreferences.getString("Degree System", "").equals("Fahrenheit")){
+           fahrenheit_val = state;
+           state = convertToCelsius(state) ;
+       }
     }
 
     @Override
     protected void asyncOnPostExecute() {
         if(state == prevState){
             setState(state);
-            ObjectAnimator animation = ObjectAnimator.ofFloat(seekBar, "translationX", -10f, 10f);
-            ObjectAnimator textAnimation = ObjectAnimator.ofFloat(tvProgress, "translationX", -10f, 10f);
-            animation.setDuration(100);
-            textAnimation.setDuration(100);
-            animation.setRepeatCount(2);
-            textAnimation.setRepeatCount(2);
-            animation.start();
-            textAnimation.start();
+            ObjectAnimator[] animations = {ObjectAnimator.ofFloat(seekBar, "translationX", -10f, 10f),
+                    ObjectAnimator.ofFloat(tvProgress, "translationX", -10f, 10f),
+                    ObjectAnimator.ofFloat(tvName, "translationX", -10f, 10f)};
+            for(ObjectAnimator anim : animations){
+                anim.setDuration(100);
+                anim.setRepeatCount(2);
+                anim.start();
+            }
         }
     }
 }

@@ -4,6 +4,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,6 +36,8 @@ public class HomeFragment extends Fragment {
     GifDrawable gifBackgroundController;
     GifImageView gifBackground;
 
+    SwipeRefreshLayout refreshLayout;
+
     public HomeFragment() {
         // Required empty public constructor
     }
@@ -56,9 +59,22 @@ public class HomeFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        initButtons();
-        initGifBackground();
+        refreshLayout = getView().findViewById(R.id.refresh_layout);
 
+        initButtons();
+        initOnRefreshListener(refreshLayout);
+        new SetBackgroundThread().start();
+    }
+
+    void initOnRefreshListener(final SwipeRefreshLayout refreshLayout){
+        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                URL apiURL = NetworkUtils.buildUrl("12345.json");
+                Extended[] buttons = {bBoiler, bPool, bHeating};
+                new ServerGetRequestTask(buttons, refreshLayout).execute(apiURL);
+            }
+        });
     }
 
     private void initButtons() {
@@ -72,11 +88,7 @@ public class HomeFragment extends Fragment {
     void setDataFromServer(){
         URL apiURL = NetworkUtils.buildUrl("12345.json");
         Extended[] buttons = {bBoiler, bPool, bHeating};
-        new com.example.viktor.boilercontrollapp.utilities.ServerGetRequestTask(buttons).execute(apiURL);
-    }
-
-    private void initGifBackground(){
-        new SetBackgroundThread().start();
+        new ServerGetRequestTask(buttons).execute(apiURL);
     }
 
     class SetBackgroundThread extends Thread{

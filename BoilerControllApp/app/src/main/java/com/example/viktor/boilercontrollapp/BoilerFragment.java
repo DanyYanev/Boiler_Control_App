@@ -3,6 +3,7 @@ package com.example.viktor.boilercontrollapp;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +24,8 @@ public class BoilerFragment extends Fragment {
     ExtendedCircularSeekBar mTemperatureBar;
     ExtendedCircularSeekBar mHysteresisBar;
 
+    SwipeRefreshLayout refreshLayout;
+
     public BoilerFragment() {
         // Required empty public constructor
     }
@@ -38,16 +41,35 @@ public class BoilerFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mTemperatureBar = new ExtendedCircularSeekBar(20, "TemperatureBar", "BTempSet",
-                (CircularSeekBar) getView().findViewById(R.id.temperature_seek_bar), (TextView) getView().findViewById(R.id.temperature_text_view));
 
-        mHysteresisBar = new ExtendedCircularSeekBar(20, "HysteresisBar", "HTempSet",
-                (CircularSeekBar) getView().findViewById(R.id.hysteresis_seek_bar), (TextView) getView().findViewById(R.id.hysteresis_text_view));
+        refreshLayout = getView().findViewById(R.id.refresh_layout);
+        initOnRefreshListener(refreshLayout);
 
-        stickySwitch = new ExtendedStickySwitch(0, "BoilerHeatingSwitch", "BoilerSource",
+        mTemperatureBar = new ExtendedCircularSeekBar(40, "TemperatureBar", "BTempSet",
+                (CircularSeekBar) getView().findViewById(R.id.temperature_seek_bar),
+                (TextView) getView().findViewById(R.id.temperature_text_view), (TextView) getView().findViewById(R.id.temperature_text_field),
+                getActivity(), refreshLayout);
+
+        mHysteresisBar = new ExtendedCircularSeekBar(40, "HysteresisBar", "HTempSet",
+                (CircularSeekBar) getView().findViewById(R.id.hysteresis_seek_bar),
+                (TextView) getView().findViewById(R.id.hysteresis_text_view), (TextView) getView().findViewById(R.id.hysteresis_text_field),
+                getActivity(), refreshLayout);
+
+        stickySwitch = new ExtendedStickySwitch(1, "BoilerHeatingSwitch", "BoilerSource",
                 (StickySwitch)getView().findViewById(R.id.sticky_switch));
 
         setDataFromServer();
+    }
+
+    void initOnRefreshListener(final SwipeRefreshLayout refreshLayout){
+        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                URL apiURL = NetworkUtils.buildUrl("12345.json");
+                Extended[] buttons = {mTemperatureBar, mHysteresisBar, stickySwitch};
+                new ServerGetRequestTask(buttons, refreshLayout).execute(apiURL);
+            }
+        });
     }
 
     void setDataFromServer(){

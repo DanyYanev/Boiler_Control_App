@@ -50,6 +50,10 @@ public class MainActivity extends AppCompatActivity implements MasterFragment.On
                 fragmentTransaction.replace(R.id.fragment_detail, new BoilerFragment());
                 fragmentTransaction.commit();
                 break;
+            case 3:
+                fragmentTransaction.replace(R.id.fragment_detail, new SettingsFragment());
+                fragmentTransaction.commit();
+                break;
         }
         Toast.makeText(MainActivity.this, Integer.toString(position), Toast.LENGTH_LONG).show();
     }

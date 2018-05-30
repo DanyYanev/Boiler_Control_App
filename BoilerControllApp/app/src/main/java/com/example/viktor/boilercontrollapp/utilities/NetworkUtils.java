@@ -65,6 +65,7 @@ public final class NetworkUtils {
         HttpURLConnection httpCon = (HttpURLConnection) url.openConnection();
         httpCon.setDoOutput(true);
         httpCon.setRequestMethod("PUT");
+        httpCon.setConnectTimeout(1000);
         httpCon.setRequestProperty("Content-Type", "application/json");
         OutputStreamWriter out = new OutputStreamWriter(
                 httpCon.getOutputStream());
@@ -79,6 +80,7 @@ public final class NetworkUtils {
 
     public static HashMap<String, String> getResponseFromHttpUrl(URL url) throws IOException {
         HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+        urlConnection.setConnectTimeout(1000);
         String jsonServerResponse = null;
         HashMap<String, String> values = new HashMap<>();
 

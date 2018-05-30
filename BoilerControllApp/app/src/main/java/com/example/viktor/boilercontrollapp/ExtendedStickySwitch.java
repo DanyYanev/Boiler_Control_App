@@ -44,12 +44,14 @@ public class ExtendedStickySwitch extends Extended{
 
     @Override
     protected void asyncOnPreExecute() {
+        stickySwitch.setEnabled(false);
         stickySwitch.setDirection(state == 0 ?
                 StickySwitch.Direction.LEFT : StickySwitch.Direction.RIGHT, false, false);
     }
 
     @Override
     protected void asyncOnPostExecute() {
+        stickySwitch.setEnabled(true);
         if(state == prevState){
             ObjectAnimator animation = ObjectAnimator.ofFloat(stickySwitch, "translationX", -10f, 10f);
             animation.setDuration(100);
@@ -57,5 +59,6 @@ public class ExtendedStickySwitch extends Extended{
             animation.start();
         }
         setState(state);
+
     }
 }

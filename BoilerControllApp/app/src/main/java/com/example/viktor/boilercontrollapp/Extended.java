@@ -24,6 +24,7 @@ public abstract class Extended {
     Integer prevState;
     String name;
     String propName;
+    Integer responseCode = 0;
 
 
     public Extended(Integer state, String name, String propName) {
@@ -46,7 +47,9 @@ public abstract class Extended {
         return propName;
     }
 
-
+    public int geResponceCode() {
+        return responseCode;
+    }
 
     void sendDataToServer(String field, String value){
         String data_arr[] = {"12345", field, value};
@@ -63,7 +66,6 @@ public abstract class Extended {
         @Override
         protected Void doInBackground(String[]... strings) {
             String data[] = strings[0];
-            int responseCode = 0;
 
             try {
 

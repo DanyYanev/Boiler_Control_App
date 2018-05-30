@@ -3,6 +3,7 @@ package com.example.viktor.boilercontrollapp;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +28,8 @@ public class HeatingFragment extends Fragment {
     ExtendedStickySwitch sourceStickySwitch;
     ExtendedCircularSeekBar mTemperatureBar;
 
+    SwipeRefreshLayout refreshLayout;
+
     public HeatingFragment() {
         // Required empty public constructor
     }
@@ -48,11 +51,16 @@ public class HeatingFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        refreshLayout = getView().findViewById(R.id.refresh_layout);
+        initOnRefreshListener(refreshLayout);
+
         sourceStickySwitch = new ExtendedStickySwitch(1, "BoilerPumpSwitch", "HeatingSource",
                 (StickySwitch)getView().findViewById(R.id.source_sticky_switch));
 
         mTemperatureBar = new ExtendedCircularSeekBar(20, "FloorTemperatureBar", "HTempSet",
-                (CircularSeekBar) getView().findViewById(R.id.floor_temperature_seek_bar), (TextView) getView().findViewById(R.id.floor_temperature_text_view));
+                (CircularSeekBar) getView().findViewById(R.id.floor_temperature_seek_bar),
+                (TextView) getView().findViewById(R.id.floor_temperature_text_view), (TextView) getView().findViewById(R.id.temperature_text_view),
+                getActivity(), refreshLayout);
 
         bFloor = new ExtendedButton(0, "Floor", "FloorPump",
                 (Button) getView().findViewById(R.id.floor_button));
@@ -61,7 +69,20 @@ public class HeatingFragment extends Fragment {
         bFloorConvector = new ExtendedButton(0, "FloorConvector", "FloorConvPump",
                 (Button) getView().findViewById(R.id.floor_convector_button));
 
+
         setDataFromServer();
+
+    }
+
+    void initOnRefreshListener(final SwipeRefreshLayout refreshLayout){
+        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                URL apiURL = NetworkUtils.buildUrl("12345.json");
+                Extended[] buttons = {sourceStickySwitch, mTemperatureBar, bFloor, bConvector, bFloorConvector};
+                new ServerGetRequestTask(buttons, refreshLayout).execute(apiURL);
+            }
+        });
     }
 
     void setDataFromServer(){

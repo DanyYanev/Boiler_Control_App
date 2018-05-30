@@ -1,6 +1,7 @@
 package com.example.viktor.boilercontrollapp.utilities;
 
 import android.os.AsyncTask;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 
 import com.example.viktor.boilercontrollapp.Extended;
@@ -16,14 +17,21 @@ import java.util.HashMap;
 
 public class ServerGetRequestTask extends AsyncTask<URL, Void, HashMap<String, String>> {
     Extended[] buttons;
+    SwipeRefreshLayout refreshLayout;
 
     public ServerGetRequestTask(Extended[] buttons){
         this.buttons = buttons;
     }
-//        @Override
-//        protected void onPreExecute() {
-//            mLoadingIndicator.setVisibility(View.VISIBLE);
-//        }
+
+    public ServerGetRequestTask(Extended[] buttons, SwipeRefreshLayout refreshLayout){
+        this.buttons = buttons;
+        this.refreshLayout = refreshLayout;
+    }
+
+    @Override
+    protected void onPreExecute() {
+        asyncOnPreExecute();
+    }
 
     @Override
     protected HashMap<String, String> doInBackground(URL... urls) {
@@ -41,11 +49,18 @@ public class ServerGetRequestTask extends AsyncTask<URL, Void, HashMap<String, S
 
     @Override
     protected void onPostExecute(HashMap<String, String> values) {
-//            mLoadingIndicator.setVisibility(View.INVISIBLE);
         if (!values.isEmpty()) {
             for(Extended button : buttons){
                 button.setState(Integer.parseInt(values.get(button.getPropName())));
             }
         }
+        if(refreshLayout != null){
+            refreshLayout.setRefreshing(false);
+            Log.d("SwipeRefresh", "works");
+        }
+        asyncOnPostExecute();
     }
+
+    protected void asyncOnPreExecute(){}
+    protected void asyncOnPostExecute(){}
 }
