@@ -26,7 +26,6 @@ public class ExtendedCircularSeekBar extends Extended {
     Context context;
     int min_val;
     int max_val;
-    int fahrenheit_val;
 
     public ExtendedCircularSeekBar(Integer state, String name, String propName, CircularSeekBar seekBar, TextView tvProgress,
                                    TextView tvName, Context context) {
@@ -68,9 +67,9 @@ public class ExtendedCircularSeekBar extends Extended {
         String degree_system = sharedPreferences.getString("Degree System", "");
 
         if(degree_system.equals("Fahrenheit")){
-            min_val = (int) (min_val * 1.8 + 32);
-            max_val =(int) (max_val * 1.8 + 32);
-            this.state = (int) (this.state * 1.8 + 32);
+            min_val = convertToFahrenheit(min_val);
+            max_val = convertToFahrenheit(max_val);
+            this.state = convertToFahrenheit(this.state);
         }
 
         setProperties(seekBar);
@@ -123,6 +122,9 @@ public class ExtendedCircularSeekBar extends Extended {
             public void onStopTrackingTouch(CircularSeekBar CircularSeekBar) {
                 prevState = state;
                 state = (int) CircularSeekBar.getProgress();
+                if(sharedPreferences.getString("Degree System", "").equals("Fahrenheit")){
+                    state = convertToCelsius(state);
+                }
                 new ServerPutRequestTask().execute(new String[]{"12345", propName, state.toString()});
 
                 if(refreshLayout != null)refreshLayout.setEnabled(true);
@@ -135,15 +137,12 @@ public class ExtendedCircularSeekBar extends Extended {
     }
 
     int convertToFahrenheit(int val){
-        return (int) (min_val * 1.8 + 32);
+        return (int) (val * 1.8 + 32);
     }
 
     @Override
     protected void asyncOnPreExecute() {
-       if(sharedPreferences.getString("Degree System", "").equals("Fahrenheit")){
-           fahrenheit_val = state;
-           state = convertToCelsius(state) ;
-       }
+
     }
 
     @Override
@@ -158,6 +157,9 @@ public class ExtendedCircularSeekBar extends Extended {
                 anim.setRepeatCount(2);
                 anim.start();
             }
+        }else if(sharedPreferences.getString("Degree System", "").equals("Fahrenheit")){
+            state = convertToFahrenheit(state);
         }
+
     }
 }

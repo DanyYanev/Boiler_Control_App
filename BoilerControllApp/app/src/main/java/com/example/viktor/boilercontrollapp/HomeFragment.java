@@ -88,7 +88,8 @@ public class HomeFragment extends Fragment {
     void setDataFromServer(){
         URL apiURL = NetworkUtils.buildUrl("12345.json");
         Extended[] buttons = {bBoiler, bPool, bHeating};
-        new ServerGetRequestTask(buttons).execute(apiURL);
+        ServerGetRequestTask task = new ServerGetRequestTask(buttons, getContext());
+        task.execute(apiURL);
     }
 
     class SetBackgroundThread extends Thread{

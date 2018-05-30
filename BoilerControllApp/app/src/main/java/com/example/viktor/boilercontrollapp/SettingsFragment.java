@@ -51,7 +51,7 @@ public class SettingsFragment extends Fragment {
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.putString("Degree System", s);
                 Log.d("Direction", s);
-                editor.commit();
+                editor.apply();
             }
         });
 

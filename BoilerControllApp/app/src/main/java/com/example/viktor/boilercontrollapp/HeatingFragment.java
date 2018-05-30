@@ -88,6 +88,6 @@ public class HeatingFragment extends Fragment {
     void setDataFromServer(){
         URL apiURL = NetworkUtils.buildUrl("12345.json");
         Extended[] buttons = {sourceStickySwitch, mTemperatureBar, bFloor, bConvector, bFloorConvector};
-        new ServerGetRequestTask(buttons).execute(apiURL);
+        new ServerGetRequestTask(buttons, getContext()).execute(apiURL);
     }
 }

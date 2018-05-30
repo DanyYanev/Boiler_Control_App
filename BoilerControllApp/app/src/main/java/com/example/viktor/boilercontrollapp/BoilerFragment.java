@@ -75,6 +75,6 @@ public class BoilerFragment extends Fragment {
     void setDataFromServer(){
         URL apiURL = NetworkUtils.buildUrl("12345.json");
         Extended[] buttons = {mTemperatureBar, mHysteresisBar, stickySwitch};
-        new ServerGetRequestTask(buttons).execute(apiURL);
+        new ServerGetRequestTask(buttons, getContext()).execute(apiURL);
     }
 }

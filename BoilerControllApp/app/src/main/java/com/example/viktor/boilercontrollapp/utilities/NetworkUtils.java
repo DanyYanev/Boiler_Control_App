@@ -83,12 +83,14 @@ public final class NetworkUtils {
         urlConnection.setConnectTimeout(1000);
         String jsonServerResponse = null;
         HashMap<String, String> values = new HashMap<>();
-
+        Integer responseCode = 10;
         try {
             InputStream in = urlConnection.getInputStream();
 
             Scanner scanner = new Scanner(in);
             scanner.useDelimiter("\\A");
+            responseCode = urlConnection.getResponseCode();
+
 
             boolean hasInput = scanner.hasNext();
             if (hasInput) {
@@ -112,7 +114,7 @@ public final class NetworkUtils {
         } finally {
             urlConnection.disconnect();
         }
-
+        values.put("response", responseCode.toString());
         return values;
     }
 
