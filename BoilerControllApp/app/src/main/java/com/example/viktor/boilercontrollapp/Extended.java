@@ -25,20 +25,27 @@ public abstract class Extended {
     String name;
     String propName;
 
+
     public Extended(Integer state, String name, String propName) {
         this.state = state;
         prevState = this.state;
         this.name = name;
         this.propName = propName;
+
+    }
+
+    public void setState(Integer state) {
+        this.state = state;
     }
 
     public Integer getState() {
         return state;
     }
 
-    public void setState(Integer state) {
-        this.state = state;
+    public String getPropName() {
+        return propName;
     }
+
 
 
     void sendDataToServer(String field, String value){
@@ -69,7 +76,7 @@ public abstract class Extended {
 
                 dataJson.put("values_attributes", new JSONArray().put(values));
                 try {
-                    responseCode = NetworkUtils.sendPostRequestToServer(dataJson, NetworkUtils.buildUrl(data[0]));
+                    responseCode = NetworkUtils.sendPostRequestToServer(dataJson, NetworkUtils.buildUrl(data[0] + ".json"));
                 } catch (IOException e) {
                     responseCode = 0;
                     e.printStackTrace();

@@ -1,8 +1,5 @@
 package com.example.viktor.boilercontrollapp;
 
-import android.animation.ObjectAnimator;
-import android.animation.ValueAnimator;
-import android.graphics.drawable.TransitionDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -15,21 +12,16 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.viktor.boilercontrollapp.utilities.NetworkUtils;
+import com.example.viktor.boilercontrollapp.utilities.ServerGetRequestTask;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 
 import pl.droidsonroids.gif.GifDrawable;
 import pl.droidsonroids.gif.GifImageView;
-
-import static java.lang.Thread.sleep;
 
 
 public class HomeFragment extends Fragment {
@@ -79,7 +71,9 @@ public class HomeFragment extends Fragment {
     }
     void setDataFromServer(){
         URL apiURL = NetworkUtils.buildUrl("12345.json");
-        new ServerGetRequestTask().execute(apiURL);
+        Extended[] buttons = {bBoiler, bPool, bHeating};
+        new com.example.viktor.boilercontrollapp.utilities.ServerGetRequestTask(buttons).execute(apiURL);
+        //new ServerGetRequestTask().execute(apiURL);
         return;
     }
 

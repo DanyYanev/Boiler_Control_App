@@ -52,7 +52,7 @@ public class BoilerFragment extends Fragment {
         mHysteresisBar = new ExtendedCircularSeekBar(20, "HysteresisBar", "HTempSet",
                 (CircularSeekBar) getView().findViewById(R.id.hysteresis_seek_bar), (TextView) getView().findViewById(R.id.hysteresis_text_view));
 
-        stickySwitch = new ExtendedStickySwitch(0, "BoilerHeatingSwitch", "BoilerSource", "HeatingSource",
+        stickySwitch = new ExtendedStickySwitch(0, "BoilerHeatingSwitch", "BoilerSource",
                 (StickySwitch)getView().findViewById(R.id.sticky_switch));
 
         setDataFromServer();

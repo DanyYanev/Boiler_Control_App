@@ -42,6 +42,10 @@ public class MainActivity extends AppCompatActivity implements MasterFragment.On
                 fragmentTransaction.replace(R.id.fragment_detail, new HomeFragment());
                 fragmentTransaction.commit();
                 break;
+            case 1:
+                fragmentTransaction.replace(R.id.fragment_detail, new HeatingFragment());
+                fragmentTransaction.commit();
+                break;
             case 2:
                 fragmentTransaction.replace(R.id.fragment_detail, new BoilerFragment());
                 fragmentTransaction.commit();

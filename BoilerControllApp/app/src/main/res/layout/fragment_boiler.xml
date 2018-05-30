@@ -25,7 +25,7 @@
         app:ss_rightIcon="@drawable/ic_thermometer"
         app:ss_rightText="Heater"
         app:ss_selectedTextSize="14sp"
-        app:ss_sliderBackgroundColor="#DADADA"
+        app:ss_sliderBackgroundColor="#EAEAEA"
         app:ss_switchColor="#5ed6ff"
         app:ss_textColor="@android:color/black"
         app:ss_textSize="12sp"

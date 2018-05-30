@@ -12,11 +12,9 @@ import io.ghyeok.stickyswitch.widget.StickySwitch;
 
 public class ExtendedStickySwitch extends Extended{
     StickySwitch stickySwitch; // state == 1 => BoilerOn ; state == 0 => HeaterOn
-    String secondPropName;
 
-    public ExtendedStickySwitch(Integer state, String name, String propName, String secondPropName, StickySwitch stickySwitch) {
+    public ExtendedStickySwitch(Integer state, String name, String propName, StickySwitch stickySwitch) {
         super(state, name, propName);
-        this.secondPropName = secondPropName;
         this.stickySwitch = stickySwitch;
 
         setState(this.state);
@@ -27,8 +25,8 @@ public class ExtendedStickySwitch extends Extended{
     public void setState(Integer state) {
         prevState = state;
         this.state = state;
-        stickySwitch.setDirection(state == 0 ?
-                StickySwitch.Direction.LEFT : StickySwitch.Direction.RIGHT, false, false);
+        stickySwitch.setDirection(state == 1 ?
+                StickySwitch.Direction.LEFT : StickySwitch.Direction.RIGHT, true, false);
 
     }
 
@@ -39,17 +37,14 @@ public class ExtendedStickySwitch extends Extended{
             public void onSelectedChange(StickySwitch.Direction direction, String s) {
                 prevState = state;
                 state = (state == 0) ? 1 : 0;
-               sendDataToServer(propName,
-                        (direction.equals(StickySwitch.Direction.LEFT) ? "1" : "0"));
-               sendDataToServer(secondPropName,
-                        (direction.equals(StickySwitch.Direction.LEFT) ? "0" : "1"));
+               sendDataToServer(propName, state.toString());
             }
         });
     }
 
     @Override
     protected void asyncOnPreExecute() {
-        stickySwitch.setDirection(state == 1 ?
+        stickySwitch.setDirection(state == 0 ?
                 StickySwitch.Direction.LEFT : StickySwitch.Direction.RIGHT, false, false);
     }
 
