@@ -1,7 +1,5 @@
 package com.example.viktor.boilercontrollapp;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -11,7 +9,11 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.example.viktor.boilercontrollapp.utilities.NetworkUtils;
+import com.example.viktor.boilercontrollapp.utilities.ServerGetRequestTask;
 import com.skumar.flexibleciruclarseekbar.CircularSeekBar;
+
+import java.net.URL;
 
 import io.ghyeok.stickyswitch.widget.StickySwitch;
 
@@ -58,5 +60,13 @@ public class HeatingFragment extends Fragment {
                 (Button) getView().findViewById(R.id.convector_button));
         bFloorConvector = new ExtendedButton(0, "FloorConvector", "FloorConvPump",
                 (Button) getView().findViewById(R.id.floor_convector_button));
+
+        setDataFromServer();
+    }
+
+    void setDataFromServer(){
+        URL apiURL = NetworkUtils.buildUrl("12345.json");
+        Extended[] buttons = {sourceStickySwitch, mTemperatureBar, bFloor, bConvector, bFloorConvector};
+        new ServerGetRequestTask(buttons).execute(apiURL);
     }
 }

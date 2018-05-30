@@ -73,57 +73,10 @@ public class HomeFragment extends Fragment {
         URL apiURL = NetworkUtils.buildUrl("12345.json");
         Extended[] buttons = {bBoiler, bPool, bHeating};
         new com.example.viktor.boilercontrollapp.utilities.ServerGetRequestTask(buttons).execute(apiURL);
-        //new ServerGetRequestTask().execute(apiURL);
-        return;
-    }
-
-    void setButtonStates(Button button, boolean state){
-        if(state) button.setBackgroundResource(R.drawable.button_on_off_transition);
-        else button.setBackgroundResource(R.drawable.button_off_on_transition);
     }
 
     private void initGifBackground(){
         new SetBackgroundThread().start();
-    }
-
-    class ServerGetRequestTask extends AsyncTask<URL, Void, HashMap<String, String>> {
-//        @Override
-//        protected void onPreExecute() {
-//            mLoadingIndicator.setVisibility(View.VISIBLE);
-//        }
-
-        @Override
-        protected HashMap<String, String> doInBackground(URL... urls) {
-            URL apiURL = urls[0];
-            HashMap<String, String> values = new HashMap<>();
-
-            try {
-                values = NetworkUtils.getResponseFromHttpUrl(apiURL);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-
-            return values;
-        }
-
-        @Override
-        protected void onPostExecute(HashMap<String, String> values) {
-//            mLoadingIndicator.setVisibility(View.INVISIBLE);
-            if(!values.isEmpty()){
-                getRequestValues = new HashMap<>(values);
-
-                if (getRequestValues != null) {
-                    Log.d("Hello", "Hello");
-                    bBoiler.setState(Integer.parseInt(getRequestValues.get("BoilerPic")));
-                    bPool.setState(Integer.parseInt(getRequestValues.get("PoolPump")));
-                    bHeating.setState(Integer.parseInt(getRequestValues.get("HeatingPic")));
-
-                }
-            }else{
-                Toast.makeText(getActivity(), "Connection Error Occurred", Toast.LENGTH_LONG).show();
-            }
-        }
     }
 
     class SetBackgroundThread extends Thread{
