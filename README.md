@@ -10,7 +10,7 @@
 ## Design & Architecture  
   The communication beteween the app and the Arduino happens with a Rails based server. Communication happens through the HTTP protocol. When the application starts a GET request is sent to the server and the information on the screen is updated. When a user interacts with the application, a new PUT request is send to the server and the coresponding fields in the DB are updated. The user can refresh the application with a down swipe gesture. Due to the Imperial and Metrics standard the user can choose the one, he wants the data to be converted in. 
   
-Server Repo - https://github.com/DanyYanev/Boiler_Control_Server
+Server Repo - https://github.com/DanyYanev/Boiler_Control_Server <br>
 Controller Repo - https://github.com/DanyYanev/Boiler_Control_Controller
 
 Resources
