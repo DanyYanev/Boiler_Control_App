@@ -82,8 +82,8 @@ public final class NetworkUtils {
 
 }
  ```
+The different menus are utilized using fragmens. A SwipeRefreshLayout is used to refresh the data. To save user preferences after the app has been closed the SharedPreferences API comes in use which uses key-values pairs. 
  
-  
 Server Repo - https://github.com/DanyYanev/Boiler_Control_Server <br>
 Controller Repo - https://github.com/DanyYanev/Boiler_Control_Controller
 
