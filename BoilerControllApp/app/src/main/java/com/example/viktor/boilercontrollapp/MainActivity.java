@@ -3,6 +3,7 @@ package com.example.viktor.boilercontrollapp;
 import android.os.AsyncTask;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.widget.SlidingPaneLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -22,13 +23,17 @@ import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity implements MasterFragment.OnMenuOptionSelectListener{
 
+    Toolbar myToolbar;
+    SlidingPaneLayout slidingPaneLayout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        slidingPaneLayout = findViewById(R.id.sliding_pane);
+        myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        myToolbar.setTitle("Boiler Control");
         setSupportActionBar(myToolbar);
-
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.add(R.id.fragment_detail, new HomeFragment());
         fragmentTransaction.commit();
@@ -39,23 +44,25 @@ public class MainActivity extends AppCompatActivity implements MasterFragment.On
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         switch(position){
             case 0:
+                myToolbar.setTitle("Boiler Control");
                 fragmentTransaction.replace(R.id.fragment_detail, new HomeFragment());
-                fragmentTransaction.commit();
                 break;
             case 1:
-                fragmentTransaction.replace(R.id.fragment_detail, new HeatingFragment());
-                fragmentTransaction.commit();
+                myToolbar.setTitle(R.string.item3);
+                fragmentTransaction.replace(R.id.fragment_detail, new BoilerFragment());
                 break;
             case 2:
-                fragmentTransaction.replace(R.id.fragment_detail, new BoilerFragment());
-                fragmentTransaction.commit();
+                myToolbar.setTitle(R.string.item2);
+                fragmentTransaction.replace(R.id.fragment_detail, new HeatingFragment());
                 break;
             case 3:
+                myToolbar.setTitle(R.string.item4);
                 fragmentTransaction.replace(R.id.fragment_detail, new SettingsFragment());
-                fragmentTransaction.commit();
                 break;
         }
-        Toast.makeText(MainActivity.this, Integer.toString(position), Toast.LENGTH_LONG).show();
+        fragmentTransaction.commit();
+        slidingPaneLayout.closePane();
+        //Toast.makeText(MainActivity.this, Integer.toString(position), Toast.LENGTH_LONG).show();
     }
 
 }

@@ -49,12 +49,12 @@ public class MenuListAdapter extends ArrayAdapter<MenuActionItem> {
         if(position == MenuActionItem.ITEM1.ordinal()) {
             holder.menuItemImageView.setImageDrawable(activity.getDrawable(R.drawable.ic_home));
             holder.menuItemTextView.setText(activity.getResources().getString(R.string.item1));
-        }else if(position == MenuActionItem.ITEM2.ordinal()) {
-            holder.menuItemImageView.setImageDrawable(activity.getDrawable(R.drawable.ic_thermometer));
-            holder.menuItemTextView.setText(activity.getResources().getString(R.string.item2));
-        }else if(position == MenuActionItem.ITEM3.ordinal()) {
+        }else if(position == MenuActionItem.ITEM2.ordinal()){
             holder.menuItemImageView.setImageDrawable(activity.getDrawable(R.drawable.ic_heater));
             holder.menuItemTextView.setText(activity.getResources().getString(R.string.item3));
+        }else if(position == MenuActionItem.ITEM3.ordinal()) {
+            holder.menuItemImageView.setImageDrawable(activity.getDrawable(R.drawable.ic_thermometer));
+            holder.menuItemTextView.setText(activity.getResources().getString(R.string.item2));
         }else if(position == MenuActionItem.ITEM4.ordinal()) {
             holder.menuItemImageView.setImageDrawable(activity.getDrawable(R.drawable.ic_gears));
             holder.menuItemTextView.setText(activity.getResources().getString(R.string.item4));

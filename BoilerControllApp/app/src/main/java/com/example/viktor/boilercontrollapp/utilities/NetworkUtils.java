@@ -38,8 +38,8 @@ public final class NetworkUtils {
     private static final String TAG = NetworkUtils.class.getSimpleName();
 
     private static final String SERVER_URL =
-                "http://178.169.176.184:8000/users/";
-    //"http://178.169.176.184:8000/users/";
+    //            "http://192.168.43.81:3000/users/";
+    "http://178.169.176.184:8000/users/";
 
     //private static final String USER_ID = null;
 

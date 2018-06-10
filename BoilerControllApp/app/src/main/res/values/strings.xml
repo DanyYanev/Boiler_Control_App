@@ -7,8 +7,8 @@
     <string name="boiler_view_string">Boiler</string>
     <string name="heating_view_string">Heating</string>
     <string name="item1">Home</string>
-    <string name="item2">Heater</string>
-    <string name="item3">Boiler</string>
+    <string name="item2">Heating</string>
+    <string name="item3">Hot Water</string>
     <string name="item4">Settings</string>
 
     <!-- TODO: Remove or change this placeholder text -->

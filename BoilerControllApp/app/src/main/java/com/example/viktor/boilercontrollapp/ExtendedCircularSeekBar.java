@@ -28,21 +28,18 @@ public class ExtendedCircularSeekBar extends Extended {
     int max_val;
 
     public ExtendedCircularSeekBar(Integer state, String name, String propName, CircularSeekBar seekBar, TextView tvProgress,
-                                   TextView tvName, Context context) {
+                                   TextView tvName, Context context, int min_val, int max_val) {
         super(state, name, propName);
         this.seekBar = seekBar;
         this.tvProgress = tvProgress;
         this.tvName = tvName;
         this.context = context;
-        min_val = 30;
-        max_val = 70;
+        this.min_val = min_val;
+        this.max_val = max_val;
 
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-        String degree_system = sharedPreferences.getString("Degree System", "");
-
-        if(degree_system.equals("Fahrenheit")){
-            min_val = convertToFahrenheit(min_val);
-            max_val = convertToFahrenheit(max_val);
+        if(isFahrenheit()){
+            this.min_val = convertToFahrenheit(this.min_val);
+            this.max_val = convertToFahrenheit(this.max_val);
             this.state = convertToFahrenheit(this.state);
         }
 
@@ -53,22 +50,19 @@ public class ExtendedCircularSeekBar extends Extended {
     }
 
     public ExtendedCircularSeekBar(Integer state, String name, String propName, CircularSeekBar seekBar, TextView tvProgress,
-                                   TextView tvName, Context context, SwipeRefreshLayout refreshLayout) {
+                                   TextView tvName, Context context, SwipeRefreshLayout refreshLayout, int min_val, int max_val) {
         super(state, name, propName);
         this.seekBar = seekBar;
         this.tvProgress = tvProgress;
         this.tvName = tvName;
         this.context = context;
         this.refreshLayout = refreshLayout;
-        min_val = 30;
-        max_val = 70;
+        this.min_val = min_val;
+        this.max_val = max_val;
 
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-        String degree_system = sharedPreferences.getString("Degree System", "");
-
-        if(degree_system.equals("Fahrenheit")){
-            min_val = convertToFahrenheit(min_val);
-            max_val = convertToFahrenheit(max_val);
+        if(isFahrenheit()){
+            this.min_val = convertToFahrenheit(this.min_val);
+            this.max_val = convertToFahrenheit(this.max_val);
             this.state = convertToFahrenheit(this.state);
         }
 
@@ -77,12 +71,24 @@ public class ExtendedCircularSeekBar extends Extended {
         initOnCircilarSeekBarChangeListener(seekBar);
     }
 
+    boolean isFahrenheit(){
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        String degree_system = sharedPreferences.getString("Degree System", "");
+        return degree_system.equals("Fahrenheit");
+    }
+
     @Override
     public void setState(Integer state){
         prevState = this.state;
         this.state = state;
+
         seekBar.setProgress(state);
-        tvProgress.setText(state + "\u00B0" + "C");
+
+        if(isFahrenheit()) {
+            tvProgress.setText(state + "\u00B0" + "F");
+        }else{
+            tvProgress.setText(state + "\u00B0" + "C");
+        }
     }
 
     public void setRefreshLayout(SwipeRefreshLayout refreshLayout) {
@@ -114,7 +120,11 @@ public class ExtendedCircularSeekBar extends Extended {
         seekBar.setOnCircularSeekBarChangeListener(new CircularSeekBar.OnCircularSeekBarChangeListener() {
             @Override
             public void onProgressChanged(CircularSeekBar CircularSeekBar, float progress, boolean fromUser) {
-                tvProgress.setText(Integer.toString((int) progress) + "\u00B0" + "C");
+                if(isFahrenheit()) {
+                    tvProgress.setText(Integer.toString((int) progress) + "\u00B0" + "F");
+                }else{
+                    tvProgress.setText(Integer.toString((int) progress) + "\u00B0" + "C");
+                }
             }
 
             @Override

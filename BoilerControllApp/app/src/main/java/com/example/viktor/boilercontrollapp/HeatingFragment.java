@@ -56,10 +56,10 @@ public class HeatingFragment extends Fragment {
         sourceStickySwitch = new ExtendedStickySwitch(1, "BoilerPumpSwitch", "HeatingSource",
                 (StickySwitch)getView().findViewById(R.id.source_sticky_switch));
 
-        mTemperatureBar = new ExtendedCircularSeekBar(20, "FloorTemperatureBar", "HTempSet",
+        mTemperatureBar = new ExtendedCircularSeekBar(32, "FloorTemperatureBar", "HTempSet",
                 (CircularSeekBar) getView().findViewById(R.id.floor_temperature_seek_bar),
                 (TextView) getView().findViewById(R.id.floor_temperature_text_view), (TextView) getView().findViewById(R.id.temperature_text_view),
-                getActivity(), refreshLayout);
+                getActivity(), refreshLayout, 30, 40);
 
         bFloor = new ExtendedButton(0, "Floor", "FloorPump",
                 (Button) getView().findViewById(R.id.floor_button));

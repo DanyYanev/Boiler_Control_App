@@ -5,15 +5,16 @@
     android:id="@+id/refresh_layout"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="com.example.viktor.boilercontrollapp.HeatingFragment">
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
 
         <io.ghyeok.stickyswitch.widget.StickySwitch
             android:id="@+id/source_sticky_switch"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
             android:layout_marginTop="24dp"
             app:ss_animationDuration="600"
@@ -23,63 +24,74 @@
             app:ss_leftIcon="@drawable/ic_heater"
             app:ss_leftText="Boiler"
             app:ss_rightIcon="@drawable/ic_thermometer"
-            app:ss_rightText="Pump"
+            app:ss_rightText="Heating"
             app:ss_selectedTextSize="14sp"
             app:ss_sliderBackgroundColor="#EAEAEA"
             app:ss_switchColor="#5ed6ff"
             app:ss_textColor="@android:color/black"
             app:ss_textSize="12sp"
             android:layout_marginLeft="50dp"
-            android:layout_marginRight="50dp"/>
+            android:layout_marginRight="50dp" />
 
-        <TextView
-            android:id="@+id/floor_temperature_text_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignTop="@+id/floor_temperature_seek_bar"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="80dp"
-            android:text="00000" />
-
-        <TextView
-            android:id="@+id/floor_temperature_field"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignTop="@+id/floor_temperature_text_view"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="23dp"
-            android:text="Floor"
-            android:textStyle="bold"/>
-
-        <com.skumar.flexibleciruclarseekbar.CircularSeekBar
-            android:id="@+id/floor_temperature_seek_bar"
+        <View
             android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:layout_alignParentEnd="true"
-            android:layout_alignTop="@+id/source_sticky_switch"
-            android:layout_marginTop="95dp"
-            android:padding="20dp"
-            android:layout_marginLeft="40dp"
-            android:layout_marginRight="40dp"/>
+            android:layout_height="1dp"
+            android:background="#DDDDDD"
+            android:layout_marginTop="7dp"
+            android:layout_marginBottom="15dp"
+            android:layout_marginHorizontal="20dp" />
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <com.skumar.flexibleciruclarseekbar.CircularSeekBar
+                android:id="@+id/floor_temperature_seek_bar"
+                android:layout_width="match_parent"
+                android:layout_height="190dp"
+                android:padding="16dp"
+                android:layout_marginLeft="44dp"
+                android:layout_marginRight="44dp"/>
+
+            <TextView
+                android:id="@+id/floor_temperature_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@+id/floor_temperature_seek_bar"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="66dp"
+                android:text="00000" />
+
+            <TextView
+                android:id="@+id/floor_temperature_field"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:text="Floor Temperature"
+                android:textStyle="bold" />
+        </RelativeLayout>
 
         <Button
             android:id="@+id/floor_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_above="@+id/convector_button"
-            android:layout_alignParentStart="true"
             android:layout_gravity="end"
             android:background="@drawable/button_on"
             android:layout_marginLeft="56dp"
-            android:layout_marginBottom="30dp"
-            android:text="Floor Pump" />
+            android:text="Floor Heating Pump" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#DDDDDD"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="15dp"
+            android:layout_marginHorizontal="20dp" />
 
         <Button
             android:id="@+id/convector_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_above="@+id/floor_convector_button"
-            android:layout_alignParentEnd="true"
             android:layout_gravity="end"
             android:background="@drawable/button_on"
             android:layout_marginLeft="56dp"
@@ -90,13 +102,11 @@
             android:id="@+id/floor_convector_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentEnd="true"
             android:layout_gravity="end"
             android:layout_marginBottom="30dp"
             android:background="@drawable/button_on"
             android:layout_marginLeft="56dp"
-            android:text="Floor Convector" />
+            android:text="Floor Convector Pump" />
 
-    </RelativeLayout>
+    </LinearLayout>
 </android.support.v4.widget.SwipeRefreshLayout>

@@ -45,15 +45,15 @@ public class BoilerFragment extends Fragment {
         refreshLayout = getView().findViewById(R.id.refresh_layout);
 
 
-        mTemperatureBar = new ExtendedCircularSeekBar(40, "TemperatureBar", "BTempSet",
+        mTemperatureBar = new ExtendedCircularSeekBar(70, "TemperatureBar", "BTempSet",
                 (CircularSeekBar) getView().findViewById(R.id.temperature_seek_bar),
                 (TextView) getView().findViewById(R.id.temperature_text_view), (TextView) getView().findViewById(R.id.temperature_text_field),
-                getActivity(), refreshLayout);
+                getActivity(), refreshLayout, 65, 90);
 
-        mHysteresisBar = new ExtendedCircularSeekBar(40, "HysteresisBar", "BHistSet",
+        mHysteresisBar = new ExtendedCircularSeekBar(4, "HysteresisBar", "BHistSet",
                 (CircularSeekBar) getView().findViewById(R.id.hysteresis_seek_bar),
                 (TextView) getView().findViewById(R.id.hysteresis_text_view), (TextView) getView().findViewById(R.id.hysteresis_text_field),
-                getActivity(), refreshLayout);
+                getActivity(), refreshLayout, 2, 12);
 
         stickySwitch = new ExtendedStickySwitch(1, "BoilerHeatingSwitch", "BoilerSource",
                 (StickySwitch)getView().findViewById(R.id.sticky_switch));
